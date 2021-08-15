@@ -1,0 +1,445 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        {% block content%}
+        <!-- <div class="container" style="display: flex;justify-content: center;align-items: center;text-align: center;flex-direction: column;">
+            <p>
+                <img style="width: 300px;height: 250px;" src="{% static 'images/work_progress.png' %}" />
+            </p>
+            <label style="font-family:sans-serif">In progress</label>
+        </div> -->
+          <style>
+            .dropdown .icon{
+                 color: black !important;
+             }
+         </style>
+
+        <div class="page-content" style="padding: 10px 10px 10px 10px;">
+             {% include 'Message.html' %}
+         {% if details %}
+            <h2>Edit Checkin</h2>
+            {% else %}
+            <h2>Create New Checkin </h2>
+             <h4>Please fill the form below to add new record.
+         </h4>
+            {% endif %}
+        
+         
+         <input type="hidden" value='{{units}}' id="units_hf"/>
+        <div class="ui form">
+                <div class="two fields">                   
+                    <div class="field">
+                        <!-- <h4>Date</h4>
+                        <div class="ui calendar" id="example1">
+                            <div class="ui input left icon">
+                              <i class="calendar icon"></i>
+                              <input type="text" placeholder="Date/Time">
+                            </div>
+                          </div> -->
+                          <span>Date</span>
+                          {% include "Calendar.html" %}
+                        <!-- {{form.date}} -->
+
+                    </div>
+
+                    <div class="field inline"> 
+                        <span>Contact</span>
+                        <span class="ui left pointing red basic label contactlabel hidden">
+                            This field is required
+                         </span>
+                         <div>
+                        
+                        <select class="ui dropdown" name="contact" value='{{details.warehouse.pk}}' >
+                            {% for contact in contacts %}
+                            {% if contact.pk == details.contact.pk %}
+                            <option value='{{contact.pk}}' selected>{{contact}}</option>
+                            {% else %}
+                            <option value='{{contact.pk}}'>{{contact}}</option>
+                            {% endif %}
+                           
+                            {% endfor %}
+                        </select>
+                    </div>
+                    </div>                                    
+                </div>
+                <div class="two fields">                   
+                    <div class="field inline">
+                        <span>Reference</span>
+                        <span class="ui left pointing red basic label referencelabel hidden">
+                            This field is required
+                         </span>
+                         <div>
+                            <input placeholder="Reference" name="reference" value='{{details.reference}}' />
+                         </div>
+                         
+                    </div>
+                    <div class="field inline"> 
+                        <span>Warehouse</span>
+                        <span class="ui left pointing red basic label warehouselabel hidden">
+                            This field is required
+                         </span>
+                         <div>
+                        <select class="ui dropdown" name="warehouse" value='{{details.warehouse.pk}}' >
+                            {% for warehouse in warehouses %}
+                            {% if warehouse.pk == details.warehouse.pk %}
+                            <option value='{{warehouse.pk}}' selected>{{warehouse}}</option>
+                            {% else %}
+                            <option value='{{warehouse.pk}}'>{{warehouse}}</option>
+                            {% endif %}
+                           
+                            {% endfor %}
+                        </select>
+                        </div>
+                    </div>                                    
+                </div>
+                {% include "VariantModal.html" %}
+                <div class="field">
+                       
+                    <div class="ui fluid multiple search selection dropdown" id="itemdropdown">
+                        <!-- <div class="ui icon input">
+                          <input class="prompt" type="text" placeholder="Scan barcode or Search Items.."
+                          id="searchItemsInput">
+                          <i class="search icon"></i>
+                        </div> -->
+                        <!-- <input type="hidden" name="country" value="kp"> -->
+                        <i class="dropdown icon"></i>
+                        <input class="search" type="text" placeholder="Scan barcode or Search Items.."
+                          id="searchItemsInput">
+                        
+                               <div id="itemMenu" class="menu">                                   
+                           
+                              </div>
+                      </div>
+               
+                </div>
+
+                <div class="field">
+                    
+                    <table class="ui padded celled table">
+                        <thead>
+                            <th>Item</th>
+                            <th>Weight(in Kg)</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                        </thead>
+                        <tbody id="itemsTable">
+                           {% if details %}
+                            {% for row in details.items.all %}
+                               
+                                <tr>
+                                    <td>
+                                        {{row.item.name}}
+                                      
+                                    </td>
+                                    <td>
+                                        <input type="number" value="{{row.item.weight}}"> </td>
+                                    <td>
+                                   <input type="number" value="{{row.item.quantity}}">     
+                                    </td>
+                                    <td>
+                                        <select class="ui dropdown" value=" {{row.item.unit.pk}}">
+                                           {% for unit in units %}
+                                            <option value={{unit.pk}}>
+                                                {{unit}}
+                                           </option>
+                                           {% endfor %}
+                                        </select>
+                                        
+                                    </td>
+                                </tr>
+                              
+
+                            
+                            {% endfor %}
+                            {% endif %}
+                              
+                            
+                        </tbody>
+                        <tfoot>
+                            Add item to the list by search or scan barcode
+                            <span class="ui left pointing red basic label itemslabel hidden">
+                                This field is required
+                             </span>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="field">
+                   <span>Attachments</span>
+                    {% if details.attachment %}
+                        <div>
+                            <a href="{{ details.attachment.url }}">{{ details.attachment }}</a>
+                        </div>
+                    {% comment %} {% else %} {% endcomment %}
+                    
+                    {% endif %}
+                    <input type="file" name="attachment">
+                </div>
+                <div class="field">
+                    <span>Details</span>
+                     {% if details %}
+                        <textarea name="details" readonly>{{details.details}}</textarea>
+                    {% else %}
+                        <textarea name="details"></textarea>
+                    {% endif %}
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="is_draft" >
+                        <label>This record is draft</label>
+                      </div>
+                         
+                </div>
+        </div>
+        <center>
+            <div class="field" style="">
+             {% if details %}
+             <div class="field" style="">
+                <button class="ui primary large button submitBtn" id="saveButton"
+                onclick="EditCheckin({{details.pk}})">Save</button>
+               
+            {% else %}
+             <button class="ui primary large button submitBtn" id="saveButton"
+                onclick="ValidateCheckin()">Save</button>
+             {% endif %}
+            </div>
+        </center>
+        <script>
+
+            $(document).ready(function() {
+                    $('#itemdropdown').dropdown();
+                });
+                const itemFunc = (e) => {
+                    debugger
+      let item_div = document.createElement('div');
+      let input = e.target.value
+        debugger
+      console.log(input)
+      fetch("/api/items/search/?item="+input,{            
+      method: "GET",
+      headers: {
+      Accept: "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "Accept-Encoding": "gzip,deflate,br",
+      "X-CSRFToken": csrftoken,
+    },
+      })
+      .then((response) => {
+          debugger
+          console.log(response)
+          if (!response.ok) {
+              console.log(response);
+              response.text().then((text) => {
+              let detail = JSON.parse(text).detail[0];
+              //DisplayMessage("", detail, false);
+              });
+    } else {
+      return response.json();
+    }
+      }).then((data) => {
+          debugger            
+          let menu = document.getElementById('itemMenu')
+          let item = ''
+          let itemData = ''
+          for(let i=0; i < data.length; i++){
+              
+              itemData =JSON.stringify(data[i])
+              if(data[i]['track_variant'] == true){
+                  let variantNames = []
+                  let optionNames = []
+                  for(let k=0; k < data[i]['variant'].length; k++){
+                      variantNames.push(data[i]['variant'][k]['name'].toString())
+                      for(let j=0; j < data[i]['variant'][k]['option'].length; j++){
+                          optionNames.push(data[i]['variant'][k]['option'][j]['name'].toString())
+                      }
+                  }                    
+                  
+                  arrayVariants = setVariants(data[i]['variant'])
+                  //memory = `<input type="hidden" value= />`
+                  item += `<div class="item" onclick='AddItemVariant(${itemData})'> 
+                          <span>${data[i]['name']}</span>
+                      </div>`
+              }
+              else{
+                  item += `<div class="item" onclick='setItemTable(${itemData})'> ${data[i]['name']}</div>`
+              }                
+          }
+          menu.innerHTML = item
+          //menu.appendChild(item_div)
+      })
+    }
+
+            let searchItems = document.getElementById('searchItemsInput')
+            searchItems.addEventListener('input', itemFunc)
+            function setVariants(obj){
+                return  Object.keys(obj).map(key => ({
+                                            variant : obj[key]['name'],
+                                            options : obj[key]['option'],
+                                        }));
+                }
+            
+    function GetFormData(){
+        let formdata = new FormData();
+            let list = ['date', 'contact', 'warehouse', 'reference', 'items',
+            'details', 'attachment', 'is_draft']
+            let requiredList = ['contact','reference','warehouse','items']
+
+            let count = 0
+            for(let i of requiredList){
+                if(i == 'items'){
+                    let t = document.getElementById('itemsTable')
+                    if(t.childElementCount == 0){
+                        document.getElementsByClassName(`${i}label`)[0].classList.remove('hidden')
+                        count++
+                        
+                    }
+                    else{
+                        document.getElementsByClassName(`${i}label`)[0].classList.add('hidden')
+                    }
+                    continue
+                }
+                if (document.getElementsByName(i)[0].value == ""){
+                    document.getElementsByClassName(`${i}label`)[0].classList.remove('hidden')
+                    count++
+                }
+                else{
+                    document.getElementsByClassName(`${i}label`)[0].classList.add('hidden')
+                }
+            }
+            if (count > 0) return false;
+
+            let variantArray = []
+            for (let i of list){
+                if (i == 'attachment'){
+                    if(document.getElementsByName('attachment')[0].files[0] != undefined)
+                        formdata.append('attachment', document.getElementsByName('attachment')[0].files[0])
+                continue
+                }
+                if(i == 'date'){
+                    let d = document.getElementsByName(i)[0].value
+                    d = d.split('/')                    
+                    formdata.append(i,  d[2]+'-'+d[0]+'-'+d[1])
+                    continue
+                }
+                if(i == 'items'){
+                    let itemTable = document.getElementById('itemsTable')
+                    let rows = ''
+                    let selectedItems = []
+                    let dict = {}
+                    let variantsArray = []
+                    let optionsDict = {}
+                    let itemArray = []
+                    let itemDict = {}
+                    for(let i=0; i < itemTable.childElementCount; i++){
+                        itemDict = {}
+                        rows = itemTable.children[i].querySelectorAll('td')
+                        itemDict['item'] = rows[0].value
+                        for(let j = 0; j < rows.length; j++){
+                            if(j == 1){
+                            let weight = rows[1].children[0].value
+                            if(weight != undefined || weight != null)
+                           itemDict['quantity'] = rows[1].children[0].value;
+                           let selectedVariant = document.getElementById('selected-variant')
+                           if(selectedVariant != null){
+                               for(let k=0; k < selectedVariant.childElementCount; k++){
+                                    selectedVariant.children[k].children
+                               }
+                           }
+                        }
+                        if(j == 2){
+                           itemDict['quantity'] = rows[2].children[0].value;
+                        }
+                        if(j == 3){
+                            itemDict['unit'] = rows[3].children[0].value;
+                        }
+                    }                       
+                        
+                        //selectedItems.push((rows[0].value))
+                        itemArray.push(itemDict)
+                    }
+                    formdata.append(i,JSON.stringify(itemArray))
+                    continue
+                }
+                formdata.append(i, document.getElementsByName(i)[0].value)
+            }
+            return formdata;
+        }
+
+    function ValidateCheckin(){
+        //  transferFields = ['datepicker','from_warehouse']
+        // let transferDate = document.getElementById('')
+        debugger
+        let formdata = new FormData();
+            formdata = GetFormData()
+            if (formdata == false) 
+                return false;                   
+            
+            SaveCheckin("../api/checkin/create",formdata,'/checkins')
+            }
+            
+        function EditCheckin(id){
+            debugger
+            formdata = GetFormData()
+            editFormData(`/api/checkin/${id}/edit`,formdata,'/checkins')
+}
+
+function SaveCheckin(url, formData) {
+  var headers = new Headers();
+  headers.append("X-CSRFToken", `${csrftoken}`);
+  headers.append("X-Requested-With", "XMLHttpRequest");
+  let requestOptions = "";
+
+    requestOptions = {
+      method: "POST",
+      headers: headers,
+      body: formData,
+      redirect: "follow",
+      credentials: 'include',
+    };
+
+
+fetch(url, requestOptions)
+    .then((response) => {
+       if(response.ok != true ){
+            DisplayMessage('','Error Occured',false)
+            return
+       }
+       else
+       return response.json()
+    })
+    .then((result) => {
+      //ShowResult(JSON.parse(result));
+      window.open("/checkins", "_self");
+    })
+    .catch((error) => console.log("error", error));
+}
+    
+            </script>
+
+    </div>
+    
+        
+        {% endblock %}
+   
+
+      
+    </body>
+</html>

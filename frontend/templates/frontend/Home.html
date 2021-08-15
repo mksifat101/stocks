@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        {% block content%}
+        <!-- <div class="container" style="display: flex;justify-content: center;align-items: center;text-align: center;flex-direction: column;">
+            <p>
+                <img style="width: 300px;height: 250px;" src="{% static 'images/work_progress.png' %}" />
+            </p>
+            <label style="font-family:sans-serif">In progress</label>
+        </div> -->
+        <div class="page-content">
+           
+            <div class="ui segments numbers" style="display: flex;justify-content: space-evenly;">
+                <div class="ui segment" >
+                    <span>2</span>
+                    <h3>Checkins</h3>
+                </div>
+                <div class="ui segment" >
+                    <span>3</span>
+                    <h3>Checkouts</h3>
+                </div>
+                <div class="ui segment" >
+                    <span>54</span>
+                    <h3>Items</h3>
+                </div>
+                <div class="ui segment">
+                    <span>30</span>
+                    <h3>Contacts</h3>
+                </div>
+            </div>
+            <div class="ui form">
+                <div class="two fields">
+                    <div class="field">
+                        <select class="ui dropdown">
+                        <!-- {% for month in months %}
+                            <option value={{month}}>{{month}}</option>
+                        {% endfor %} -->
+                        <option>January</option>
+                        <option>February</option>
+                        <option>March</option>
+                        <option>April</option>
+                        <option>May</option>
+                        <option>June</option>
+                        <option>July</option>
+                        <option>August</option>
+                        <option>September</option>
+                        <option>October</option>
+                        <option>November</option>
+                        <option>December</option>
+                        </select>
+                   </div>
+                    <div class="field">
+                        <select class="ui dropdown">
+                         <option>2021</option>
+                            <option>2020</option>
+                           
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="ui segment">
+                <center>
+                <h3>Year Overview</h3>
+                <span>Please review the chart below</span>
+            </center>
+                <input type="hidden" id="checkinsValue" />
+                <input type="hidden" id="checkoutsValue" />
+                <input type="hidden" id="transfersValue" />
+                <input type="hidden" id="arrangementsValue" />
+                <canvas id="chart">
+
+                </canvas>
+                <!-- <div style="display: flex;justify-content: center;">
+                        <div style="margin-left: 60px;display: flex;justify-content: space-around;">
+                            <p class="circle-small" style="background-color: #229954 ;"></p>
+                           <span>Checkins</span> 
+                        </div>
+                        <div style="margin-left: 60px;display: flex;justify-content: space-around;">
+                            <div class="circle-small" style="background-color: #F39C12;"></div>
+                            <span>Checkouts</span>
+                        </div>
+                        <div style="margin-left: 60px;display: flex;justify-content: space-around;">
+                            <div class="circle-small" style="background-color: #1F618D;"></div>
+                            <span class="circle-small">Transfers</span>
+                            
+                        </div>
+                        <div style="margin-left: 60px;display: flex;justify-content: space-around;">
+                            <div class="circle-small" style="background-color:#CD6155;"></div>
+                            <span class="circle-small">Transfers</span>
+                            
+                        </div>
+                </div> -->
+            </div>
+        <div style="display: flex;">
+
+            {% include "pie.html" %}
+            <div>
+
+            </div>
+        </div>
+           
+                
+                
+            </div>
+            <!-- <script src="https://cdnjs.com/libraries/Chart.js"></script> -->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+                 var labels = [];
+                 let year = '21'
+                 months.forEach(element => {
+                     labels.push(element + ' ' + year)
+                 });
+                 const data = {
+                labels: labels,
+                datasets: [
+                    {
+                    label: 'Checkins',
+                    backgroundColor: '#229954',                
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: [8, 9,7,11,8,5,6,9,6,3,9,5],  
+                    stack: 'Stack 1',  
+                   barThickness : 8,
+                },
+                {
+                    label: 'Checkouts',
+                    data: [ 6, 5,7, 6,4,5,6,3,4,5,3,6],
+                    backgroundColor: '#F39C12',
+                    stack: 'Stack 2',
+                    barThickness : 8,
+                   
+                },
+                {
+                    label: 'Transfers',
+                    data: [ 6,4,6,3,2,5,6, 9,5, 3,5,7],
+                    backgroundColor: '#1F618D',
+                    stack: 'Stack 3',
+                    barThickness : 8,
+                  
+                },
+                {
+                    label: 'Adjustments',
+                    data: [ 6,3,6,9,6,3,2,5,5, 3,8,5],
+                    backgroundColor: '#CD6155',
+                    stack: 'Stack 4',
+                    barThickness : 8,
+                    
+                },
+            ]
+                };
+                const config = {
+                    type: 'bar',
+                    data,
+                    options: {
+                        scales:{
+                            x:{
+                                stacked:true,   
+                                gridLines: {
+              tickMarkLength: 15  
+            },                             
+                            }
+                        }
+                    }
+                };
+               
+               
+                var myChart = new Chart(
+                      document.getElementById('chart'),
+                      config
+            );
+            
+            </script>
+
+        {% endblock %}
+        <script src="" async defer></script>
+    </body>
+</html>

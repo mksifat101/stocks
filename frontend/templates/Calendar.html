@@ -1,0 +1,65 @@
+
+{% comment %} <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"> {% endcomment %}
+  {% comment %} <title>jQuery UI Datepicker - Default functionality</title> {% endcomment %}
+  {% comment %} <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#datepicker" ).datepicker();
+  } );
+  </script>
+</head>
+<body>
+ 
+<p>
+<h4>Date</h4>
+<input type="text" id="datepicker">
+</p>
+ 
+ 
+</body>
+</html> {% endcomment %}
+
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Static Example</title>
+  <style>body {font-family: Arial, sans-serif;}</style>
+  
+  <!-- jQuery -->
+  {% comment %} <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> {% endcomment %}
+   {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  {% endcomment %}
+
+  <!-- Fengyuan Chen's Datepicker -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+</head>
+<body>
+   {% if details|length > 0 %}
+    <input id="datepicker" name="date" placeHolder="MM-DD-YYYY" value={{details.date}}>
+    {% else %}
+  <input id="datepicker" name="date" placeHolder="MM-DD-YYYY">
+  {% endif %}
+
+  <script>
+    $(function () {
+      $("#datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+      let dateHF = document.getElementById('dateFieldHF').value
+      if(dateHF == "" )
+        $("#datepicker").datepicker('setDate', new Date());
+      else{
+        $("#datepicker").datepicker('setDate', dateHF);
+      }
+    });
+  </script>
+
+</body>
+</html>

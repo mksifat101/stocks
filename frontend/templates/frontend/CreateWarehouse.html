@@ -1,0 +1,236 @@
+<!-- {% extends 'base.html' %} -->
+<!-- {% load static %} -->
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        {% block content%}
+        <!-- <div class="container" style="display: flex;justify-content: center;align-items: center;text-align: center;flex-direction: column;">
+            <p>
+                <img style="width: 300px;height: 250px;" src="{% static 'images/work_progress.png' %}" />
+            </p>
+            <label style="font-family:sans-serif">In progress</label>
+        </div> -->
+
+        <div class="page-content" style="padding: 10px 10px 10px 10px;">
+            {% include 'Message.html' %}
+         <h2>Create New Warehouse</h2>
+         <h4>Please fill the form below to add new record.
+         </h4>
+         
+         
+        <div class="ui form">
+                <div class="two fields">                   
+                    <div class="field inline">
+                        <span>Name</span>
+                        <span class="ui left pointing red basic label namelabel hidden">
+                            This field is required
+                        </span>
+                        <div>
+                            <input placeholder="Name" name="name" value="{{details.name}}"/>
+                        </div>
+                        
+                    </div>
+
+                    <div class="field"> 
+                        <span>Phone</span>
+                        <input type="text" placeholder="Phone" name="phone" value="{{details.phone}}"/>                      
+                    </div>                                    
+                </div>
+                <div class="two fields">                   
+                  
+                      <div class="field inline">                        
+                          <span>Code</span>
+                          <span class="ui left pointing red basic label codelabel hidden">
+                            This field is required
+                        </span>
+                         <div>
+                            <input name="code" value="{{details.code}}" placeholder="Code" value="{{details.code}}"/>  
+                         </div>
+                          
+                    </div>
+                    <div class="field"> 
+                        <span>Email</span>
+                        <input type="text" placeholder="Email" name="email" value="{{details.email}}"/> 
+                    </div>                                    
+                </div>
+
+                <div class="field">
+                    <label>Image</label>
+                    <!-- {{form.image}} -->
+                    <input type="file" name="image" accept=".jpg, .jpeg, .png"/>
+                </div>
+                <div class="field">
+                    {% if details.image.url is not null %}
+    <h4>Item Image</h4>
+     <div class="img-container">         
+             
+        <div style="background-image: url({{details.image.url}});" class="imageDesc">                    
+               
+    </div>
+    {% else %}
+ <!-- <div> 
+ <label style="font-size:12px;">Image not present for this Item </label>
+ </div> -->
+    {% endif %}
+                </div>
+                <div class="field">
+                    <span>Address</span>
+                     <input name="address" value="{{details.address}}">
+                </div>
+             
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="is_active" checked="{{details.is_active}}">
+                        <label>Active</label>
+                    </div>
+                         
+                </div>
+            
+            </div>
+            <center>
+               
+            </center>
+            
+             <center>
+        <div class="field" style="">
+         {% if details %}
+         <div class="field" style="">
+            <button class="ui primary large button submitBtn" id="saveButton"
+            onclick="EditWarehouse({{details.pk}})">Save</button>
+           
+        {% else %}
+         <div class="field" style="">
+                    <button class="ui primary large button submitBtn" id="saveButton"
+                onclick="ValidateWarehouse()">Save</button>
+                </div>
+         {% endif %}
+        </div>
+    </center>
+ 
+    </div>
+    <script>
+
+    function EditWarehouse(id){
+        debugger
+       
+        let result = GetFormData()
+        if (result == false )
+                return false;
+        
+                
+                let formdata = new FormData();
+            formdata.append('code', document.getElementsByName('code')[0].value)
+            formdata.append('phone', document.getElementsByName('phone')[0].value)
+            formdata.append('email', document.getElementsByName('email')[0].value)
+            formdata.append('name', document.getElementsByName('name')[0].value)
+            formdata.append('address', document.getElementsByName('address')[0].value)
+            formdata.append('is_active', document.getElementsByName('is_active')[0].checked)
+              if(document.getElementsByName('image')[0].files[0]!= undefined)
+            formdata.append('image', document.getElementsByName('image')[0].files[0])
+            
+
+        editFormData(`/api/warehouse/${id}/edit`,formdata,'/warehouses')
+    }
+
+    function GetFormData() {
+        let count = 0
+        let list = ['name','code','phone','email','address','is_active', 'image']
+        let requiredList = ['name','code']
+            for(let i of requiredList){
+        
+        if (document.getElementsByName(i)[0].value == ""){
+            document.getElementsByClassName(`${i}label`)[0].classList.remove('hidden')
+            count++
+        }
+        else{
+            document.getElementsByClassName(`${i}label`)[0].classList.add('hidden')
+        }
+    }
+        if (count > 0) return false;
+         else return true
+    }
+        function ValidateWarehouse(){
+            debugger
+            let formdata = new FormData();
+            formdata.append('code', document.getElementsByName('code')[0].value)
+            formdata.append('phone', document.getElementsByName('phone')[0].value)
+            formdata.append('email', document.getElementsByName('email')[0].value)
+            formdata.append('name', document.getElementsByName('name')[0].value)
+            formdata.append('address', document.getElementsByName('name')[0].value)
+            formdata.append('is_active', document.getElementsByName('is_active')[0].checked)
+            if(document.getElementsByName('image')[0].files[0]!= undefined)
+                     formdata.append('image', document.getElementsByName('image')[0].files[0])
+            SaveWarehouse("../api/warehouse/create",formdata )
+        }
+
+function SaveWarehouse(url, formData) {
+  var headers = new Headers();
+  headers.append("Cookie", `csrftoken =${csrftoken}`);
+  headers.append("X-Requested-With", "XMLHttpRequest");
+  headers.append("X-CSRFToken",`${csrftoken}`);
+  let requestOptions = "";
+
+//   if (url == "api/product/add/") {
+    requestOptions = {
+      method: "POST",
+      headers: headers,
+      body: formData,
+      redirect: "follow",
+    };
+//   } else {
+//     requestOptions = {
+//       method: "PUT",
+//       headers: headers,
+//       body: formData,
+//       redirect: "follow",
+//     };
+    
+fetch(url, requestOptions)
+    .then((response) => response.text())
+    .then((result) => {
+      //ShowResult(JSON.parse(result));
+      window.open("/warehouses", "_self");
+    })
+    .catch((error) => console.log("error", error));
+}
+
+
+window.onload = function () {
+              debugger
+              document.getElementById("adjustmentButton").classList.remove("sidebarmenu")
+            }
+
+        function SearchItems(){
+                    debugger
+                    $('.ui.search')
+                    .search({
+                        source: content
+                    });
+        }
+      </script>
+        {% endblock %}
+   
+
+        <script src="" >
+        
+    
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+{% block content%}
+<div class="page-content">
+    <div class="ui segment">
+        <h3>Contacts</h3>
+        <label>Please upload the excel file to import records.</label>
+        <br/>
+        <br/>
+        <div class="ui form">
+            <label>Excel File</label>
+            <div class="ui segment">
+            <input type="file" />
+            <label>Excel file should have name, phone, email & details columns.
+You must fill the phone or email column along with name.</label>
+        </div>
+        </div>
+
+    </div>
+    {% endblock %}

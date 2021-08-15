@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+
+{% block content %}
+<div class="page-content" style="">
+<div class="ui fluid segment" style="padding: 20px 20px 20px 20px;">
+    <h3>Warehouse Details</h3>
+    <table class="ui  stackable padded table">
+        <thead>
+            <th colspan="5">Code: <span>{{warehouse.code}}</span></th>
+            <th></th>
+        </thead>
+        <tbody>
+            <tr>
+                <td  class="collapsing"><label>Namw</label></td>
+              
+                <td class="collapsing"></td>
+                <td > <span class="boldSpan">{{warehouse.name}}</span> </td>
+               
+                
+            </tr>
+            <tr>
+                <td>  <label>Phone</label>  </td>
+                
+                <td class="collapsing"></td>
+                <td> <span> {{warehouse.phone}} </span> </td>
+               
+                
+            </tr>
+            <tr>
+                <td> <label>Email</label> </td>
+                <td class="collapsing"></td>
+             
+                <td> <label> {{warehouse.email}} </label>  </td>
+               
+            </tr>
+
+            <tr>
+                <td> <label>Address</label> </td>
+                <td class="collapsing"></td>
+             
+                <td> <label> {{warehouse.address}} </label>  </td>
+               
+            </tr>
+           
+            <tr>
+                <td class="single line"> <label>Is Active</label>
+                    </td>
+                    <td class="collapsing"></td>
+                    
+                <td class="left aligned"> 
+                    <span>  
+                        {% if warehouse.is_active %}
+                        <span>Yes</span>
+                        <span><i class="green check icon"></i></span>
+                        {% else %}
+                        <span>No</span>
+                        <span><i class="red close icon"></i></span>
+                        {% endif %}
+                    </span> 
+                </td>
+                
+            </tr>
+            
+           
+        </tbody>
+    </table>
+    {% if warehouse.image.url is not null %}
+    <h4>Warehouse Image</h4>
+     <div class="img-container">
+     
+     
+             
+                     <div style="background-image: url({{warehouse.image.url}});" class="imageDesc"> 
+                    <!-- <input type="image" src={{details.image.path}}/> -->
+               
+                <div>
+    {% else %}
+ <div> 
+ <label style="font-size:12px;">Image not present for this warehouse </label>
+ </div>
+    {% endif %}
+    
+
+
+
+
+</div>
+</div>
+</div>
+</div>
+<div>
+<h3>Items available </h3>
+<div class="ui segments">
+   {% for item in items %}
+    <div class="ui segment">
+        <!-- <div class="field inline"> -->
+       <h4>Item Name: {{item.item.name}}</h4> 
+        <!-- </div> -->
+        <div>
+        <h4>Quantity Available:  <label>{{item.quantity}}</label></h4>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<br/>
+</div>
+<br/>
+{% endblock %}

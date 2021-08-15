@@ -1,0 +1,134 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        {% block content%}  
+         {% comment %} {% for msg in messages %}
+            <!-- <div class={{msg.tags}}> {{msg}}</div> -->
+           
+            {% endfor %} {% endcomment %}
+           
+        <br/>
+       <div class="page-content" style="">
+       {% include 'Messages.html' %}
+       {% include 'Message.html' %}
+        <div class="ui segment">
+            <h3>Warehouses</h3>
+            <label>Please review the data in the table below</label>
+            <div>
+                <!-- <div class="ui selection dropdown">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">Gender</div>
+                    <div class="menu">
+                      <div class="item" data-value="1">Male</div>
+                      <div class="item" data-value="0">Female</div>
+                    </div>
+                </div> -->
+                {% include "DeleteModal.html" %}
+                <div class="page-toolbar">
+                <div class="ui icon input">
+                    <input type="text" placeholder="Search...">
+                    <i class="search icon"></i>
+                  </div>
+                  <a href="/warehouses/create" class="ui violet icon button large-button">
+                    <i class="plus icon"></i>
+                       <span style="width: auto;"> Create Warehouse </span>
+                  </a>
+                </div>
+            </div>
+        </div>    
+          <table class="ui celled stackable padded table">
+              <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                    <th>Active</th>                    
+                    <th></th>                    
+                </tr>
+              </thead>
+              <tbody>
+                {% for warehouse in warehouses %}
+                     <tr>
+                    <td class="single line">
+                    <span> </span> <label> {{warehouse.name}} </label><br/>
+                  
+                    
+                    </td>
+                    <td class="single line">
+                  <label> {{warehouse.phone}} </label> <br/>
+                  <label> {{warehouse.email}} </label> 
+                        
+                    </td>
+                    <td>{{ warehouse.address }}</td>
+                    <td class="single line">
+                      {{warehouse.is_active}}
+                    </td>
+                    <td>
+                      <a href={% url 'view-warehouses' pk=warehouse.pk %}> <i class="violet eye icon"></i> </a>
+                      <a href="../warehouses/{{warehouse.pk}}/edit">   <i class="orange edit icon"></i></a>
+                      <a onclick="OpenDeleteModal('/api/warehouse/{{warehouse.pk}}/delete','/warehouses')">
+                        <i class="red trash icon"></i> 
+                      </a>
+                    </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr><th colspan="5">
+                  <div class="ui right floated pagination menu">
+                    <a class="icon item">
+                      <i class="left chevron icon"></i>
+                    </a>
+                    <a class="item">1</a>
+                    <a class="item">2</a>
+                    <a class="item">3</a>
+                    <a class="item">4</a>
+                    <a class="icon item">
+                      <i class="right chevron icon"></i>
+                    </a>
+                  </div>
+                </th>
+              </tr></tfoot>
+          </table>
+          <script>
+             
+              
+          </script>
+        </div>
+        {% endblock %}
+      
+            // fetch('',{
+            //     method: "GET",
+            //     headers: {
+            //         Accept: "application/json, text/plain, */*",
+            //         "Content-Type": "application/json",
+            //         "Accept-Encoding": "gzip,deflate,br",                    
+            //     },
+            
+            // }).then((response) => {
+
+            // }).then((data) => {
+                
+            // })
+        </script>
+    </body>
+</html>

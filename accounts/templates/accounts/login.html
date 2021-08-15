@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <style>
+        .submitBtn{
+            width:258px;
+            color: #fff !important;
+            background-color: #2E4053 !important;
+            margin-left: 10px;
+        }
+        </style>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+       {% extends "account_base.html" %}
+
+{% block content %}
+<div style="padding:20px 10px 20px 10px;margin-top:50px;" class="ui text container">
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+<div class="ui form" >
+<form method="post" action="{% url 'login' %}" style="justify-content: center;">
+{% csrf_token %}
+<center>
+    <div class="ten wide field">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+    </div>
+    
+    <br/>
+    
+    <div class="ten wide field">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+    </div>
+    <br/>
+
+</center>
+<center>
+
+    
+        <input type="submit" value="Login" class="ui button submitBtn">
+        <input type="hidden" name="next" value="{{ next }}">
+    </center>
+
+  
+
+
+
+
+
+</form>
+</div>
+{# Assumes you setup the password_reset view in your URLconf #}
+{% comment %} <p><a href="{% url 'password_reset' %}">Lost password?</a></p> {% endcomment %}
+</div>
+{% endblock %}
+        <script src="" async defer></script>
+    </body>
+</html>

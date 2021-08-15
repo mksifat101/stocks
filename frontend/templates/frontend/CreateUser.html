@@ -1,0 +1,89 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+{% block content %}
+<div class="page-content"> 
+    <h2>Create New User
+      </h2>
+    <h4>Please fill the form below to add new record.
+    </h4>
+<div class="ui form">
+<div class="two fields">
+<div class="field">
+    <label>Name</label>
+    <input type="text" />
+</div>
+<div class="field">
+    <label>Password</label>
+    <input type="password" />
+</div>
+</div>
+<div class="two fields">
+<div class="field">
+    <label>Username</label>
+    <input type="text" />
+</div>
+<div class="field">
+    <label>Confirm Password</label>
+    <input type="password" />
+</div>
+</div>
+
+<div class="two fields">
+<div class="field">
+    <label>Email</label>
+    <input type="text" />
+</div>
+<div class="field">
+    <label>Warehouse</label>
+    <input type="password" />
+</div>
+</div>
+<div class="two fields">
+    <div class="field">
+        <label>Phone</label>
+        <input type="text" />
+    </div>
+
+</div>
+
+<div class="two fields">
+    <div class="field">
+        <label>Roles</label>
+        <div class="ui checkbox">
+            <input type="checkbox" name="trackweight">
+            <label>Super Admin</label>
+          </div>
+    </div>
+
+</div>
+<h4>Permissions</h4>
+<div class="two fields">
+   
+    <div class="field">
+       
+        <div class="ui checkbox">
+            <input type="checkbox" name="trackweight">
+            <label>Can view all record</label>
+          </div>
+    </div>
+    <div class="field">
+       
+        <div class="ui checkbox">
+            <input type="checkbox" name="trackweight">
+            <label>Can edit all record</label>
+          </div>
+    </div>
+
+</div>
+<br/>
+<div class="">
+    <center>
+   <button class="ui button submitBtn">Save</button>
+    </center>
+</div>
+</div>
+</div>
+{% endblock %}

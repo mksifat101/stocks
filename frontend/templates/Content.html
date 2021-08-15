@@ -1,0 +1,31 @@
+{% load static %}
+
+{% comment %} <link rel="stylesheet" type="text/css" href="{% static 'css/App.css' %}"> {% endcomment %}
+<div class="page-content" style="">
+ <div class="ui segment">
+            <h3>{{type}}</h3>
+            <label>Please review the data in the table below</label>
+            <div>
+                <!-- <div class="ui selection dropdown">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">Gender</div>
+                    <div class="menu">
+                      <div class="item" data-value="1">Male</div>
+                      <div class="item" data-value="0">Female</div>
+                    </div>
+                </div> -->
+                <div class="page-toolbar">
+                <div class="ui icon input">
+                    <input type="text" placeholder="Search...">
+                    <i class="search icon"></i>
+                  </div>
+                  <a href="/transfers/create" class="ui violet icon button large-button">
+                    <i class="plus icon"></i>
+                       <span style="width: auto;"> Create Transfer </span>
+                  </a>
+                </div>
+            </div>
+        </div>    
+{% include 'Table.html' %}
+</div>
+

@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+
+     {% if messages %}
+ 
+  {% for message in messages %}
+    {% if message.tags %}
+        <div class="ui {{message.tags}} message">
+            <i class="close icon"></i>
+            <center>
+                <span>
+                {{ message }}
+               </span>
+            </center>
+        </div>
+    {% endif %}
+    {% endfor %}
+{% endif %}
+
+    {% comment %} {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+
+ </div>
+ {% elif message.tags == "info" %}
+  <div class="ui success message">
+ <ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+ </div>
+ {% endif %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul> {% endcomment %}
+
+{% comment %} 
+
+<div class="centeredDiv">   
+  <div class="ui message showMessage" style="display: none;">
+        <i class="close icon" style="background-color:transparent!Important;" value=""></i>
+            <div class="header">
+            
+            </div>       
+            <p style="font-weight: 500;">
+                 <span class="ui label"></span>
+            </p>    
+  </div>
+</div>
+<div style="position:fixed; bottom:305px" id="messagebar"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+<script>
+ $('.message .close')
+    .on('click', function() {
+        $(this)
+            .closest('.message')
+            .transition('scale');
+    document.querySelector('.close').value = '1'
+
+    });
+</script> {% endcomment %}

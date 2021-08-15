@@ -1,0 +1,502 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+{% block content %}
+<div class="page-content">
+  
+<div class="ui form ">
+    {% if details %}
+            <h2>Edit Item</h2>
+            {% else %}
+            <h2>Create New Item</h2>
+            <h4>Please fill the form below to add new record.
+            </h4>
+            {% endif %}
+    
+   
+    <div>
+     <div class="two fields">
+         <div class="field inline">
+           <label>Name</label>            
+           <span class="ui left pointing red basic label namelabel hidden">
+                This field is required
+            </span>
+            <div>
+                <input name="name" value="{{details.name}}"/>
+            </div>
+         </div>
+         <div class="field inline">
+          <label> Category </label>
+           <span class="ui left pointing red basic label categorylabel hidden">
+                This field is required
+            </span>
+            <div>
+                
+
+             {% if details %}
+             
+                
+                            <select class="ui dropdown" name="category" value={{details.category.pk}}>
+                                {% for category in categories %}
+                                    {% if category.pk == details.category.pk %}
+                                          <option value={{category.pk}} selected>{{category}}</option>
+                                    {% else %}
+                                          <option value={{category.pk}}>{{category}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+           
+            {% else %}
+                        <select class="ui dropdown" name="category">
+                           {% for category in categories %}
+                            <option value={{category.pk}}>{{category}}</option>
+                            {% endfor %}
+                        </select>
+            {% endif %}
+
+
+
+            </div>
+         </div>                
+     </div>
+     <div class="two fields">
+        <div class="field inline">
+           <label>Code</label>
+           <span class="ui left pointing red basic label codelabel hidden">
+                This field is required
+            </span>
+          <div>
+             <input name="code" type="text" value="{{details.code}}"/>
+          </div>
+        </div>
+        <div class="field">
+            <label>Unit</label>
+            <select class="ui selection dropdown" name="unit">
+            {% if details %}
+                {% for unit in units %}
+                {% if unit.pk == details.unit.pk %}
+                <option value={{unit.pk}} selected>{{unit}}</option>
+                {% else %}
+                 <option value={{unit.pk}}>{{unit}}</option>
+                 {% endif %}
+                {% endfor %}
+            {% else %}
+            {% for unit in units %}
+             <option value={{unit.pk}}>{{unit}}</option>
+              {% endfor %}
+             {% endif %}
+            </select>
+           
+         </div>
+
+    </div>
+
+    <div class="two fields">
+       
+        <div class="field">
+            <label>Barcode Symbology</label>
+            <select class="ui selection dropdown" name="barcode_symbology">
+        {% if details %}
+                {% for code in barcode_symbology %}
+                {% if code == details.code %}
+                <option value={{code}} selected>{{code}}</option>
+                {% else %}
+                <option value={{code}}>{{code}}</option>
+                {% endif %}
+                {% endfor %}
+        {% else %}
+            {% for code in barcode_symbology %}
+                <option value={{code}}>{{code}}</option>
+                {% endfor %}
+        {% endif %}
+            </select>
+           
+         </div>
+         <div class="field">
+            <label> Rack Location </label>
+            <input name="rack_location" value={{details.rack_location}}>     
+        </div>
+
+    </div>
+
+    <div class="two fields">
+
+        <div class="field">
+            <!-- <label>Tag</label>
+            <select class="ui selection dropdown" name="tag">
+            {% if details %}
+                {% for tag in tags %}
+                {% if tag.pk == details.tag.pk %}
+                <option value={{tag.pk}} selected>{{tag}}</option>
+                {% else %}
+                 <option value={{tag.pk}}>{{tag}}</option>
+                 {% endif %}
+                {% endfor %}
+            {% else %}
+            {% for tag in tags %}
+             <option value={{tag.pk}}>{{tag}}</option>
+              {% endfor %}
+             {% endif %}
+            </select> -->
+            <label> Tag </label>
+           <input name="tag" placeholder="Enter Tag" value="{{details.tag}}"/>
+         </div>
+
+        <div class="field">
+          <label>SKU</label>
+         <input name="SKU" value={{details.SKU}}>
+        </div>      
+    </div>
+    <div class="field">
+        <label>Image</label>
+        <!-- {{form.image}} -->
+        <input type="file" name="image" accept=".jpg, .jpeg, .png"/>
+    </div>
+
+    {% if details %}
+<div class="field">
+   
+   {% if details.image.url is not null %}
+    <h4>Item Image</h4>
+     <div class="img-container">         
+             
+        <div style="background-image: url({{details.image.url}});" class="imageDesc">                    
+               
+    </div>
+    {% else %}
+ <!-- <div> 
+ <label style="font-size:12px;">Image not present for this Item </label>
+ </div> -->
+    {% endif %}
+
+
+   
+   </div>
+{% endif %}
+    <div class="fields">
+       
+        <div class="small twelve wide field">
+           <label> Details </label>
+            {{form.details}}           
+         </div>       
+    </div>
+
+    <div class="fields">       
+        <div class="field">
+            <!-- {{form.track_weight.label}}
+            {{form.track_weight}} -->
+            <div class="ui checkbox">
+                <input type="checkbox" name="track_weight">
+                <label class="boldSpan">Track Weight</label>
+              </div>
+                 
+         </div>       
+          
+    </div>
+
+    <div class="fields">     
+        <div class="field">
+            <div class="ui checked checkbox">
+                <input type="checkbox" name="track_quantity" onchange="TrackQuantityCheck()" checked>
+                <label class="boldSpan">Track Quantity</label>
+              </div>
+            </div>
+            </div>
+            
+
+    <div class="fields qty-div">
+        <div class="field">           
+            <span>Alert on low stock of</span>
+          <input placeholder="Alert on low stock of" class="ui input" name="low_stock_alert_quantity" />
+                 
+         </div>    
+    </div>
+
+    <div class="fields">
+        <div class="field">
+          
+            <div class="ui checkbox">
+                <input type="checkbox" name="track_variant" onchange="TrackVariantCheck()">
+                <label>Track Variants e.g. Size and/or Color</label>
+              </div>
+                 
+         </div> 
+    </div>
+
+    <div class="ui segments variants-div hidden">
+        <h3>Variants</h3>
+       
+            <div class="ui segment" name="variants-div">
+                <label>Variant1 Name</label>
+                <a style="float: right;margin-right: 10px;" class="huge ui blue compact icon button" onclick="plusminusValue('no_of_pockets','+')">
+                    <i class="plus icon"></i>
+                </a>
+    
+                <a style="float: right;" class="huge ui blue compact icon button" onclick="plusminusValue('no_of_pockets','-')">
+                <i class="minus icon"></i>
+                </a>
+                <div class="fields">
+                  
+                        <div class="field inline">                                            
+                                <input type="text" name="variant">
+                                <a class="large ui brown compact icon button" onclick="plusminusValue('no_of_pockets','+')">
+                                    <i class="plus icon"></i>
+                                </a>
+            
+                                <a class="large ui brown compact icon button" onclick="plusminusValue('no_of_pockets','-')">
+                                        <i class="minus icon"></i> 
+                                </a>
+                        </div>
+             
+                </div>
+
+                    <div class="two fields" id="addOptions" name="variantOptions">
+                        <div class="field">
+                            <span>Option 1</span>
+                            <input name="option"/>
+                        </div>
+                        <div class="field">
+                            <span>Option 2</span>
+                            <input name="option"/>
+                        </div>                                             
+                    </div>
+            </div>
+          
+            <div class="ui segment">
+                <div class="fields">
+                  
+                    <div class="field inline">                                            
+                            <input type="text" name="variant">
+                            <a class="large ui brown compact icon button" onclick="plusminusValue('no_of_pockets','+')">
+                                <i class="plus icon"></i>
+                            </a>
+        
+                            <a class="large ui brown compact icon button" onclick="plusminusValue('no_of_pockets','-')">
+                                    <i class="minus icon"></i> 
+                            </a>
+                    </div>
+         
+            </div>
+                <div class="two fields" id="addOptions" name="variantOptions">
+                    <div class="field">
+                        <span>Option 1</span>
+                        <input name="option"/>
+                    </div>
+                    <div class="field">
+                        <span>Option 2</span>
+                        <input name="option"/>
+                    </div>                                             
+                </div>
+            </div>
+      <br/>
+    </div>
+       
+   
+</div>
+
+    
+    <center>
+        <div class="field" style="">
+         {% if details %}
+         <div class="field" style="">
+            <button class="ui primary large button submitBtn" id="saveButton"
+            onclick="EditItem({{details.pk}})">Save</button>
+           
+        {% else %}
+        <div class="field" style="">
+            <button class="ui primary large button submitBtn" 
+            onclick="ValidateItem()" id="saveButton">Save</button>
+        </div>
+         {% endif %}
+        </div>
+    </center>
+ 
+<!-- <div class="fields">
+
+    <div class="two field">
+       
+        {{form.name}}
+        <input/>
+    </div>
+    <div class="field">
+        
+        {{form.category}}
+    </div>
+</div>
+<div class="fields">
+
+    <div class="two field">
+      
+        {{form.name}}
+        <input/>
+    </div>
+    <div class="field">
+        {{form.category.label}}
+        {{form.category}}
+    </div> -->
+</div>
+</div>
+</div>
+<script>
+    
+
+    function TrackVariantCheck(){
+        track_Variant = document.getElementsByName('track_variant')[0].checked
+        if(track_Variant)
+            document.getElementsByClassName('variants-div')[0].classList.remove('hidden')
+        else
+        document.getElementsByClassName('variants-div')[0].classList.add('hidden')
+    }
+
+    function TrackQuantityCheck(){
+        debugger
+        track_Qty = document.getElementsByName('track_quantity')[0].checked
+        if(track_Qty)
+            document.getElementsByClassName('qty-div')[0].style.display = 'block'
+        else
+        document.getElementsByClassName('qty-div')[0].style.display = 'none'
+    }
+
+    function ValidateItem(){
+            debugger
+            let formData = new FormData()
+            formData = GetFormData()
+            if (formData == false )
+                return false;
+            // formdata.append('name', document.getElementsByName('name')[0].value)
+            // formdata.append('category', document.getElementsByName('category')[0].value)
+            // formdata.append('code', document.getElementsByName('code')[0].value)
+            // formdata.append('unit', document.getElementsByName('unit')[0].value)
+            // formdata.append('barcode_symbology', document.getElementsByName('barcode_symbology')[0].value)
+            // formdata.append('rack_location', document.getElementsByName('rack_location')[0].value)
+            // formdata.append('SKU', document.getElementsByName('SKU')[0].value)
+            
+            // formdata.append('details', document.getElementsByName('details')[0].value)
+            // if(document.getElementsByName('image')[0].files[0]!= undefined)
+            //          formdata.append('image', document.getElementsByName('image')[0].files[0])
+            SaveItem("../api/item/create",formData)
+        }
+
+
+
+function SaveItem(url, formData) {
+  var headers = new Headers();
+  headers.append("X-CSRFToken", `${csrftoken}`);
+  headers.append("X-Requested-With", "XMLHttpRequest");
+  let requestOptions = "";
+
+    requestOptions = {
+      method: "POST",
+      headers: headers,
+      body: formData,
+      redirect: "follow",
+      credentials: 'include',
+    };
+
+
+fetch(url, requestOptions)
+    .then((response) => {
+       if(response.ok != true ){
+            DisplayMessage('','Error Occured',false)
+            return
+       }
+       else
+       return response.json()
+    })
+    .then((result) => {
+      //ShowResult(JSON.parse(result));
+      window.open("/items", "_self");
+    })
+    .catch((error) => console.log("error", error));
+}
+function GetFormData(){
+
+let requiredList = ['name','category','code']
+
+let count = 0
+for(let i of requiredList){
+    if(i == 'items'){
+        let t = document.getElementById('itemsTable')
+        if(t.childElementCount == 0){
+            document.getElementsByClassName(`${i}label`)[0].classList.remove('hidden')
+            count++
+            
+        }
+        else{
+            document.getElementsByClassName(`${i}label`)[0].classList.add('hidden')
+        }
+        continue
+    }
+    if (document.getElementsByName(i)[0].value == ""){
+        document.getElementsByClassName(`${i}label`)[0].classList.remove('hidden')
+        count++
+    }
+    else{
+        document.getElementsByClassName(`${i}label`)[0].classList.add('hidden')
+    }
+}
+if (count > 0) return false;
+    let variantArray = []
+            let formdata = new FormData();
+            let list = ['name', 'category', 'code', 'unit','tag' ,'barcode_symbology',
+            'rack_location', 'SKU', 'image', 'details','track_weight','track_quantity','low_stock_alert_quantity','track_variant','variant']
+            
+            for (let i of list){
+                if (i == 'image'){
+                    if(document.getElementsByName('image')[0].files[0] != undefined)
+                        formdata.append('image', document.getElementsByName('image')[0].files[0])
+                continue
+                }
+                if(i == 'variant' && document.getElementsByName('track_variant')[0].checked){
+                   let variantdict = {}
+                   let optionsArray = []
+                   let optionDict = []
+                   //let options = document.querySelector('div[name = "variantOptions"]')
+                   let options = ''
+                   let variants = document.getElementsByName('variant')     
+                   //let variants = document.querySelector('div[name = "variants-div"]')
+                   for(let i = 0; i < variants.length; i++){
+                    //let variantdict = {}
+                    //let options = variants.querySelector('div[name = "variantOptions"]')
+                    variantdict = {}
+                    options = document.querySelectorAll('div[name = "variantOptions"]')[i]
+                    variantdict['name'] = variants[i].value
+                    optionsArray = []   
+                        for(let j=0; j < options.childElementCount;j++){   
+                                              
+                        // optionsArray.push(children[j].querySelector('input').value)
+                        //optionsArray[j] = options.children[j].querySelector('input').value 
+                        let optionDict = {}
+                        optionDict['name'] = options.children[j].querySelector('input').value
+                        optionsArray.push(optionDict)
+                     }
+                     variantdict['option'] = optionsArray
+                     variantArray.push(variantdict) 
+                   }                   
+                   
+                      
+                //    variantdict['option'] = optionsArray
+                  
+                   formdata.append(i, JSON.stringify(variantArray))            
+                   continue
+                }
+                if(i == 'track_weight' || i == 'track_quantity' || i == 'track_variant'){
+                    formdata.append(i, document.getElementsByName(i)[0].checked)
+                    continue
+                }
+                formdata.append(i, document.getElementsByName(i)[0].value)
+            }
+            return formdata;
+}
+
+function EditItem(id){
+        debugger
+        formData = GetFormData()
+        if (formData == false )
+                return false;
+        editFormData(`/api/item/${id}/edit`,formData,'/items')
+    }
+
+</script>
+{% endblock  %}

@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+
+{% block content %}
+<div class="page-content" style="">
+
+<div class="ui fluid segment" style="padding: 20px 20px 20px 20px;">
+    <h3>Item Details</h3>
+    <table class="ui  stackable padded table">
+        <thead>
+            <th colspan="5">Code: <span>{{details.code}}</span></th>
+            <th></th>
+        </thead>
+        <tbody>
+            <tr>
+                <td  class="collapsing"><label>Name</label></td>
+              
+                <td class="collapsing"></td>
+                <td > <span class="boldSpan">{{details.name}}</span> </td>
+               
+                
+            </tr>
+            <tr>
+                <td>  <label>Category</label>  </td>
+                
+                <td class="collapsing"></td>
+                <td> <span> {{details.category}} </span> </td>
+               
+                
+            </tr>
+            <tr>
+                <td> <label>Unit</label> </td>
+                <td class="collapsing"></td>
+             
+                <td> <label> {{details.unit}} </label>  </td>
+               
+            </tr>
+            <tr>
+                <td ><label>SKU</label> </td>
+                <td class="collapsing"></td>
+                <td> <label> {{details.SKU}} </label></td>
+               
+               
+            </tr>
+            <tr>
+                <td class="single line"> <label>Track Weight</label>
+                    </td>
+                    <td class="collapsing"></td>
+                    
+                <td class="left aligned"> 
+                    <span>  
+                        {% if details.track_weight %}
+                        <span><i class="green check icon"></i></span>>
+                        {% else %}
+                        <span><i class="red close icon"></i></span>
+                        {% endif %}
+                    </span> 
+                </td>
+                
+            </tr>
+            <tr>
+                <td class="single line"> <label>Track Quantity</label>
+                    </td>
+                    <td class="collapsing"></td>
+                    
+                <td class="left aligned"> 
+                    <span>  
+                        {% if details.track_quantity %}
+                        <span><i class="green check icon"></i></span>
+                        {% else %}
+                        <span><i class="red close icon"></i></span>
+                        {% endif %}
+                    </span> 
+                </td>
+                
+            </tr>
+            <tr>
+                <td><label>Details</label></td>
+                <td class="collapsing"></td>                    
+                <td><span>{{details.details}}</span></td>
+            </tr>
+            <tr>
+                <td></td>
+                
+            </tr>
+        </tbody>
+    </table>
+    <div class="segments">
+        
+        <div class="segment">
+            <h3></h3>
+        </div>
+    </div>
+
+    {% if details.image.url is not null %}
+    <h4>Item Image</h4>
+     <div class="img-container">                      
+                     <div style="background-image: url({{details.image.url}});" class="imageDesc"> 
+                    <!-- <input type="image" src={{details.image.path}}/> -->
+               
+                <div>
+    {% else %}
+ <div> 
+ <label style="font-size:12px;">Image not present for this Item </label>
+ </div>
+    {% endif %}
+
+
+
+
+</div>
+</div>
+
+{% endblock %}

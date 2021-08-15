@@ -1,0 +1,93 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+{% block content %}
+<div class="page-content"> 
+    <h2>Create New Contact
+      </h2>
+    <h4>Please fill the form below to add new record.
+    </h4>
+<div class="ui form">
+<div class="field inline">
+    <label>Name</label>
+    <span class="ui left pointing red basic label namelabel hidden">
+        This field is required
+    </span>
+    <div>
+        {{form.name}}
+    </div>
+    
+</div>
+<div class="field">
+    <label>Email</label>
+    {{form.email}}
+</div>
+<div class="field inline">
+    <label>Phone</label>
+    <span class="ui left pointing red basic label phonelabel hidden">
+        This field is required
+    </span>
+    <div>
+        {{form.phone}}
+    </div>
+   
+</div>
+<div class="field">
+    <label>Details</label>
+    {{form.details}}
+</div>
+<div class="">
+    <center>
+    {% if details %}
+    <button class="ui button submitBtn" onclick="EditContact({{details.pk}})">Save</button>   
+   {% else %}
+   <button class="ui button submitBtn" onclick="SaveContact()">Save</button>  
+   {% endif %}
+    </center>
+</div>
+</div>
+</div>
+<script>
+    function SaveContact(){
+        debugger
+        formdata = GetFormData()
+        if (formdata == false) return false;
+        postFormData("../api/contact/create",formdata,'/contacts')
+    }
+    
+    function GetFormData(){
+        let list = ['name','email','phone','details']
+        let requiredList = ['name','phone']
+        let count = 0
+        for(let i of requiredList){
+            if (document.getElementsByName(i)[0].value == ""){
+                document.getElementsByClassName(`${i}label`)[0].classList.remove('hidden')
+                count++
+            }
+            else{
+                document.getElementsByClassName(`${i}label`)[0].classList.add('hidden')
+            }
+        }
+        if (count > 0) return false;
+        let formdata = new FormData();
+         for (let i of list){
+            if (i == 'image'){
+                        if(document.getElementsByName('image')[0].files[0] != undefined)
+                            formdata.append('image', document.getElementsByName('image')[0].files[0])
+                    continue
+                    }
+            formdata.append(i, document.getElementsByName(i)[0].value)
+         }
+         return formdata;
+    }
+    
+    function EditContact(id){
+        debugger
+        formdata = GetFormData()
+        editFormData(`/api/contact/${id}/edit`,formdata,'/contacts')
+    }
+    </script>
+
+{% endblock %}

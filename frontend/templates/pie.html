@@ -1,0 +1,86 @@
+
+
+
+ 
+
+<div>
+<center>
+<div class="ui segment">
+
+  <h3 style="margin-top:30px;">Top Products</h3>
+
+    <canvas id="piechart1"> 
+
+    </canvas>
+   
+</div>
+ </center>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+   
+   const pie_data = {
+  labels: ['T23', 'T19', 'T16', 'T13', 'T11'],
+  datasets: [
+    {
+      label: 'T23',
+      data: [2,3,6,9,10],
+      backgroundColor: ['#229954','#F39C12','#1F618D','#1F618D','#AF33FF'],
+    }
+  ]
+//   {
+//       label: 'T23',
+//       data: 10,
+//       backgroundColor: '#229954',
+//     },
+//     {
+//       label: 'T19',
+//       data: 11,
+//       backgroundColor: '#F39C12'
+//     },
+//     {
+//       label: 'T16',
+//       data: 16,
+//       backgroundColor: '#1F618D',
+//     },
+//     {
+//       label: 'T13',
+//       data: 6,
+//       backgroundColor: '',
+//     },
+//     {
+//       label: 'T11',
+//       data: 9,
+//       backgroundColor: '#AF33FF',
+//     },
+};
+     config = {
+        type: 'pie',
+        data: pie_data,
+        options: {
+            responsive: true,
+            plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: ''
+            }
+            }
+        },
+};
+var ctx = document.getElementById('piechart1').getContext('2d');
+var chart = new Chart(ctx,                      
+                      config
+            );
+ DATA_COUNT = 5;
+ NUMBER_CFG = {count: DATA_COUNT, min: 0, max: 100};
+
+
+
+ 
+
+</script>
+</div>
+
+ 

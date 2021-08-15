@@ -1,0 +1,127 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+{% block content %}
+<div class="page-content"> 
+<script>
+    $('.ui.dropdown').dropdown();
+</script>
+    <h2>Create New Category
+      </h2>
+    <h4>Please fill the form below to add new record.
+    </h4>
+<div class="ui form">
+<div class="field inline">
+    <label>Name</label><span class="ui left pointing red basic label namelabel hidden">
+      This field is required
+    </span>
+    <div>
+    {{form.name}}
+    </div>
+</div>
+<div class="field inline">
+    <label>Code</label><span class="ui left pointing red basic label codelabel hidden">
+       This field is required
+    </span>
+      <div>
+  <input name="code" value={{details.code}}>
+     </div>
+</div>
+<div class="field">
+ <label>Image</label>
+ {% if details %}
+       <span>Choose File to upload new Image</span>
+    {% endif %}
+        <input type="file" name="image" accept=".jpg, .jpeg, .png" onchange="SetImageValue(this)"/>
+</div>
+{% if details %}
+<div class="field">
+    {% if details.image == '' %}
+    <!-- <div style="background-image: url({{''}});" class="productDesc">  -->
+        <!-- <input type="image" src={{details.image.path}}/> -->
+    <!-- </div> -->
+    {% else %}
+    <div class="img-container">
+        <div>
+        <span>Image Last Uploaded: </span><a>{{image_name}}</a>
+    <div style="background-image: url({{details.image.url}});" class="imageDesc"> 
+        <!-- <input type="image" src={{details.image.path}}/> -->
+    </div>
+</div>
+</div>
+    {% endif %}
+   </div>
+{% endif %}
+
+    <div class="field">
+        <label>Parent Category</label>
+            <select class="ui dropdown" name="parent_category">
+                    {% for category in parent_categories %}
+                    <option value={{category.pk}}>{{category}}</option>
+                    {% endfor %}
+            </select>
+    </div>
+<br/>
+{% comment %} <div class="field"> {% endcomment %}
+    <div>
+    <center>
+    {% if details %}
+    <button class="ui button submitBtn" onclick="EditCategory({{details.pk}})">Save</button>
+   {% else %}
+   
+   <button class="ui button submitBtn" onclick="SaveCategory()">Save</button>
+   {% endif %}
+    </center>
+    </div>
+ <!-- </div>  -->
+{% if details %}
+<div>    
+<button class="ui red outline button" onclick="DeleteEntity('/api/category/{{details.pk}}/delete','/categories')"> Delete </button>   
+</div>
+{% endif %}
+</div>
+</div>
+<script>
+function SaveCategory(){
+    debugger
+    let formdata = new FormData();
+    formdata = GetFormData()
+    if (formdata == false) return false;
+    postFormData("../api/category/create",formdata,'/categories')
+}
+
+function GetFormData(){
+    let list = ['name','code','image','parent_category']
+    let requiredList = ['name','code']
+    let count = 0
+    for(let i of requiredList){
+        if (document.getElementsByName(i)[0].value == ""){
+            document.getElementsByClassName(`${i}label`)[0].classList.remove('hidden')
+            count++
+        }
+        else{
+            document.getElementsByClassName(`${i}label`)[0].classList.add('hidden')
+        }
+    }
+    if (count > 0) return false;
+    let formdata = new FormData();
+     for (let i of list){
+        if (i == 'image'){
+                    if(document.getElementsByName('image')[0].files[0] != undefined)
+                        formdata.append('image', document.getElementsByName('image')[0].files[0])
+                continue
+                }
+        formdata.append(i, document.getElementsByName(i)[0].value)
+     }
+     return formdata;
+}
+
+function EditCategory(id){
+    debugger
+    formdata = GetFormData()
+    editFormData(`/api/category/${id}/edit`,formdata,'/categories')
+}
+</script>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+
+{% block content %}
+<div class="page-content" style="">
+
+<!-- <input id="checkinDate" type="hidden" value={{details.date}} /> -->
+<div class="ui fluid segment" style="padding: 20px 20px 20px 20px;">
+    <h3>Transfer Details</h3>
+    <div class="ui horizontal segments">
+            <div class="segment">
+                <h4>Date:</h4> <span id="datetag" class="boldSpan">
+                    {{details.date}} </span> <br/>
+                    <span class="boldSpan">{{details.reference}}</span>
+            </div>
+
+            <div class="segment">
+                
+                <label>To:</label> <span class="boldSpan">{{details.to_warehouse.name}}</span>  <br/>
+                <span class="boldSpan"> {{details.to_warehouse.phone}} </span> <br/>
+                <span class="boldSpan">{{details.to_warehouse.email}}</span>
+            </div>
+    </div>
+    <div class="ui segment">
+    <h3>From:</h3>
+        <span> {{details.from_warehouse.name}} </span> <br/>
+        <span> {{details.from_warehouse.address}} </span> <br/>
+        <span> {{details.from_warehouse.phone}} </span> <br/>
+        <span> {{details.from_warehouse.email}} </span> <br/>
+    </div>
+    <table class="ui  stackable padded table">
+        <thead>
+            <th > Item </th>
+            <th> Weight </th>
+            <th>Quantity</th>
+            <th></th>
+        </thead>
+        <tbody>
+            <!-- <tr>
+                <td  class="collapsing"><label>Date</label></td>
+              
+                <td class="collapsing"></td>
+                <td > <span class="boldSpan"></span> </td>
+               
+                
+            </tr> -->
+            {% for item in details.item.all %}
+            <tr>
+                <td> 
+                    {{item.item.name}}  
+                    {% if item.item.track_variant %}
+
+                    {% endif %}
+                </td>
+                
+                <td >
+                    {{item.weight}} kg
+                </td>
+                <td> 
+                    {{item.quantity}} 
+                    {% if item.item.unit is not null %}
+                        {{item.item.unit}}
+                     {% endif %}
+                </td>
+                <td> 
+                    <!-- {% if item.item.image.url is not null %}
+                   
+                     <div class="img-container">                      
+                                     <div style="background-image: url({{details.image.url}});" class="imageDesc"> 
+                                     <input type="image" src={{details.image.path}}/> -->
+                               
+                                <!-- <div>
+                    {% else %} -->
+                 <!-- <div> 
+                 <label style="font-size:12px;">Image not present for this Item </label>
+                 </div> -->
+                    <!-- {% endif %} --> 
+                   
+                </td>
+               
+                
+            </tr>
+            {% endfor %}
+          
+            
+            <!-- <tr>
+                <td class="single line"> <label>Track Quantity</label>
+                    </td>
+                    <td class="collapsing"></td>
+                    
+                <td class="left aligned"> 
+                    <span>  
+                        {% if details.track_quantity %}
+                        <span><i class="green check icon"></i></span>
+                        {% else %}
+                        <span><i class="red close icon"></i></span>
+                        {% endif %}
+                    </span> 
+                </td>
+                
+            </tr>
+            <tr>
+                <td><label>Details</label></td>
+                <td class="collapsing"></td>                    
+                <td><span>{{details.details}}</span></td>
+            </tr>
+            <tr>
+                <td></td>
+                
+            </tr> -->
+        </tbody>
+    </table>
+    <div class="segments">
+        
+        <div class="segment">
+            <h3></h3>
+        </div>
+    </div>
+
+
+
+
+
+
+</div>
+</div>
+<script>
+    // window.onload = function (){
+    //     document.getElementById('dateFieldHF').value 
+    // }
+</script>
+{% endblock %}

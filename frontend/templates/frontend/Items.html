@@ -1,0 +1,185 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        {% block content %}  
+      
+        <br/>
+       <div class="page-content" style="">
+         {% include "Messages.html" %}
+        <div class="ui segment" style="width: initial;">
+            <h3>Items</h3>
+            <label>Please review the data in the table below</label>
+            <div>
+                <!-- <div class="ui selection dropdown">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">Gender</div>
+                    <div class="menu">
+                      <div class="item" data-value="1">Male</div>
+                      <div class="item" data-value="0">Female</div>
+                    </div>
+                </div> -->
+                <div class="page-toolbar">
+                <div class="ui icon input">
+                    <input type="text" placeholder="Search...">
+                    <i class="search icon"></i>
+                  </div>
+                  <a href="/items/create" class="ui violet icon button large-button">
+                    <i class="plus icon"></i>
+                       <span style="width: auto;"> Create New Item </span>
+                  </a>
+                </div>
+            </div>
+        </div>    
+        {% include 'DeleteModal.html' %}
+        <div style="display: flex;justify-content: center;flex-wrap: wrap;">
+          <table class="ui celled stackable padded table">
+              <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Options</th>
+                    <th>Relations</th>
+                    <th>Stock</th>                    
+                    <th></th>                    
+                </tr>
+              </thead>
+              <tbody id="table-body">
+                {% for item in items %}
+                    <tr value="{{row.pk}}" class="clickable-row">
+                    <td class="single line">
+                    <b> {{item.name}} </b><br/>
+                    <span>Code:</span> <b> {{item.code}} </b><br/>
+                    <span>SKU:</span> <span> {{item.SKU}} </span><br/>
+                    <span>Symbology:</span> <label> {{item.barcode_symbology}} </label><br/>
+                    
+                    </td>
+                    <td class="single line">
+                        <span>Track Weight 
+                        {% if item.track_weight %}
+                          <i class="icon green checkmark"></i>
+                                          
+                          {% else %}
+                        <i class="icon red close"></i>                           
+                       
+                        {% endif %}
+                        </span> <br/>
+                        <span>Track Quantity 
+                        {% if item.track_quantity %}                        
+                              <i class="icon green checkmark"></i> 
+                        {% else %}
+                          <i class="icon red close"></i>   
+                        {% endif %}
+                        </span> <br/>
+                        <span>Alert on: 
+                          {% if item.low_stock_alert_quantity %}  
+                          {{item.low_stock_alert_quantity}}
+                            {% else %}
+                         <span>0</span>
+                            {% endif %} 
+                          </span>
+                         
+                        
+                    </td>
+                    <td>
+                    {{item.category}}<br/>
+                    <span>Unit: {{item.unit}} </span> <br/>
+                   
+                    {% if item.variant.all.count > 0 %}
+                     <span>Variants</span> <br/>
+                      {% for var in item.variant.all %}
+                          <b>{{var}}: </b>
+                          {% for k in var.option.all %}
+                          {{k}} 
+                          {% endfor %}<br/>
+                        {% endfor %}
+                    {% endif %} 
+                       
+                  
+                    {% comment %} <b>{{item.variant.name}}: </b>  {% endcomment %}
+                    </td>
+                    <td>
+                    {% comment %} {{item.warehouses}} {% endcomment %}
+                      {% for warehouse in item.warehouses %}
+                        <span>  {{warehouse.name}}:  
+                          {{warehouse.qty}} </span> <br/>
+                      {% endfor %} 
+                      <span>Total: </span> <span> {{warehouse.total}} </span>
+                      {% comment %} <span>WH1: 2.00(0.00)</span> <br/>
+                      <span>WH2: 0.00(0.00)</span>  <br/>
+                      <span>WH3: 3.00(0.00)</span>  <br/>
+                      <span>WH4: 1.00(0.00)</span>  <br/>
+                      <span class="ui divider"></span> <br/>
+                      <span>Total: <b>6.00</b></span> {% endcomment %}
+                    </td>
+                    <td class="single line">
+                        {% comment %} <i class="blue bars fill icon"></i>
+                        <i class="blue file icon"></i> {% endcomment %}
+                      <a href={% url 'view-items' pk=item.pk %}> <i class="violet eye icon"></i> </a>
+                      <a href="../items/{{item.pk}}/edit">   <i class="orange edit icon"></i></a>
+                      <a onclick="OpenDeleteModal('/api/item/{{item.pk}}/delete','/items')">
+                        <i class="red trash icon"></i> 
+                      </a>
+                    </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr><th colspan="5">
+                  <div class="ui right floated pagination menu">
+                    <a class="icon item">
+                      <i class="left chevron icon"></i>
+                    </a>
+                    <a class="item">1</a>
+                    <a class="item">2</a>
+                    <a class="item">3</a>
+                    <a class="item">4</a>
+                    <a class="icon item">
+                      <i class="right chevron icon"></i>
+                    </a>
+                  </div>
+                </th>
+              </tr></tfoot>
+          </table>
+        </div>
+        </div>
+        <script>
+        
+        </script>
+        {% endblock %}
+        <script src="" async defer>
+
+            fetch('',{
+                method: "GET",
+                headers: {
+                    Accept: "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Accept-Encoding": "gzip,deflate,br",                    
+                    "X-CSRFToken": `${csrftoken}`,                    
+                },
+            
+            }).then((response) => {
+
+            }).then((data) => {
+                
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,563 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        {% block content%}
+        <!-- <div class="container" style="display: flex;justify-content: center;align-items: center;text-align: center;flex-direction: column;">
+            <p>
+                <img style="width: 300px;height: 250px;" src="{% static 'images/work_progress.png' %}" />
+            </p>
+            <label style="font-family:sans-serif">In progress</label>
+        </div> -->
+        <style>
+            .dropdown .icon{
+                 color: black !important;
+             }
+         </style>
+        <div class="page-content" style="padding: 10px 10px 10px 10px;">
+            {% include 'Message.html' %}
+            {% if details %}
+            <h2>Edit Transfer</h2>
+            {% else %}
+                <h2>Create New Transfer</h2>
+                 <h4>Please fill the form below to add new record.
+                 </h4> 
+            {% endif %}
+                                     
+        <input type="hidden" value='{{units}}' id="units_hf"/>
+        <div class="ui form">
+                <div class="two fields">                   
+                    <div class="field">
+                        <!-- <h4>Date</h4>
+                        <div class="ui calendar" id="example1">
+                            <div class="ui input left icon">
+                              <i class="calendar icon"></i>
+                              <input type="text" placeholder="Date/Time">
+                            </div>
+                          </div> -->
+                          <span>Date</span>
+                          {% include "Calendar.html" %}
+                        <!-- {{form.date}} -->
+
+                    </div>
+
+                    <div class="field"> 
+                    <span>From Warehouse</span>
+                        <span>{{form.from_warehouse.label}}</span>
+                        <select class="ui dropdown" name="from_warehouse">
+                             {% for warehouse in warehouses %}
+                            {% if warehouse.pk == details.from_warehouse.pk %}
+                            <option value='{{warehouse.pk}}' selected>{{warehouse}}</option>
+                            {% else %}
+                            <option value='{{warehouse.pk}}'>{{warehouse}}</option>
+                            {% endif %}
+                           
+                            {% endfor %}
+                        </select>
+                    </div>                                    
+                </div>
+                <div class="two fields">                   
+                    <div class="field inline">
+                        <span>Reference</span>
+                        <span class="ui left pointing red basic label referencelabel hidden">
+                            This field is required
+                        </span>
+                        <div>
+                         <input placeholder="Reference" name="reference" value='{{details.reference}}'/>
+                         </div>
+                    </div>
+                    <div class="field"> 
+                        <span>To Warehouse</span>
+                        <select class="ui dropdown" name="to_warehouse">
+                             {% for warehouse in warehouses %}
+                            {% if warehouse.pk == details.to_warehouse.pk %}
+                            <option value='{{warehouse.pk}}' selected>{{warehouse}}</option>
+                            {% else %}
+                            <option value='{{warehouse.pk}}'>{{warehouse}}</option>
+                            {% endif %}
+                           
+                            {% endfor %}
+                        </select>
+                    </div>                                    
+                </div>
+                <div class="ui small modal">
+                    <input type="hidden" id="are_options_selected">
+                    <div class="header">Select Variants</div>
+                        <div class="content">
+                        <!-- <p>gffv</p>
+                        <p>gyduwgqdtwy</p>
+                        <p>bdwbhy</p> -->
+                            <div class="ui form">
+                                    <div class="fields">
+                                        <input placeholder="Scan barcode" />
+                                    </div>
+                                    <div class="fields" id="item_variant">
+                                        <!-- <div class="field">
+                                            <span id=""></span>
+                                        </div>
+                                        <div class="field">
+
+                                        </div> -->
+                                    </div>
+                            </div>
+                        </div>
+                  </div>
+                <div class="field">
+                       
+                            <div class="ui fluid multiple search selection dropdown" id="itemdropdown">
+                                <!-- <div class="ui icon input">
+                                  <input class="prompt" type="text" placeholder="Scan barcode or Search Items.."
+                                  id="searchItemsInput">
+                                  <i class="search icon"></i>
+                                </div> -->
+                                <!-- <input type="hidden" name="country" value="kp"> -->
+                                <i class="dropdown icon"></i>
+                                <input type="text" class="search" placeholder="Search Items.. or Scan barcode"
+                                  id="searchItemsInput">
+                                
+                                       <div id="itemMenu" class="menu">                                   
+                                   
+                                      </div>
+                              </div>
+                       
+                </div>
+                <div class="field">
+                    <table class="ui padded celled table">
+                        <thead>
+                            <th>Item</th>
+                            <th>Weight</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                        </thead>
+                        <tbody id="itemsTable">
+                            
+                                {% if details %}
+                            {% for row in details.item.all %}
+                               
+                                <tr>
+                                    <td>
+                                        {{row.item.name}}
+                                      
+                                    </td>
+                                    <td>
+                                        <input type="number" value="{{row.weight}}"> </td>
+                                    <td>
+                                   <input type="number" value="{{row.quantity}}">     
+                                    </td>
+                                    <td>
+                                        <select class="ui dropdown" value=" {{row.item.unit.pk}}">
+                                           {% for unit in units %}
+                                            <option value={{unit.pk}}>
+                                                {{unit}}
+                                           </option>
+                                           {% endfor %}
+                                        </select>
+                                        
+                                    </td>
+                                </tr>
+                              
+
+                            
+                            {% endfor %}
+                            {% endif %}
+                            
+                        </tbody>
+                        <tfoot>
+                            Add item to the list by search or scan barcode
+                            <span class="ui left pointing red basic label itemslabel hidden">
+                            This field is required
+                        </span>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="field">
+                    <span>Attachments</span>
+                    <input type="file" name="attachment" multiple="multiple">
+                </div>
+                <div class="field">
+                    <span>Details</span>
+                    <textarea name="details"></textarea>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="is_draft">
+                        <label>This record is draft</label>
+                      </div>                         
+                </div>
+        </div>
+        <center>
+            <div class="field" style="">
+
+                  {% if details %}
+            <div class="field" style="">
+                <button class="ui primary large button submitBtn" id="saveButton"
+                onclick="EditTransfer({{details.pk}})">Save</button>
+           
+        {% else %}
+            <div class="field" style="">
+                        <button class="ui primary large button submitBtn" id="saveButton"
+                onclick="ValidateTransfer()">Save</button>
+                    </div>
+         {% endif %}
+
+
+               
+            </div>
+        </center>
+
+        <script>
+            $( document ).ready(function() {
+                $('#itemdropdown').dropdown();
+            });
+      
+        var arrayVariants = []
+     
+        function EditTransfer(id){
+        debugger
+        formData = GetFormData()
+        if (formData == false )
+                return false;
+        editFormData(`/api/transfer/${id}/edit`,formData,'/transfers')
+    }
+
+     function ValidateTransfer(){
+        //  transferFields = ['datepicker','from_warehouse']
+        // let transferDate = document.getElementById('')
+        if(document.getElementsByName('from_warehouse')[0].value == document.getElementsByName('to_warehouse')[0].value){
+            DisplayMessage('', 'From Warehouse and To Warehouse cannot be same', false)
+            return
+        }
+        else
+         $('.message').hide()
+
+       debugger
+            let formData = new FormData()
+            formData = GetFormData()
+            if (formData == false )
+                return false;            
+           
+            postFormData("../api/transfer/create",formData,'/transfers')
+        }
+     
+     
+     let searchItems = document.getElementById('searchItemsInput')
+    
+    
+    function setVariants(obj){
+      return  Object.keys(obj).map(key => ({
+                                variant : obj[key]['name'],
+                                options : obj[key]['option'],
+                            }));
+    }
+
+    const itemFunc = (e) => {
+        let item_div = document.createElement('div');
+        let input = e.target.value
+       
+        console.log(input)
+        fetch("../api/items/search/?item="+input,{            
+        method: "GET",
+        headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "Accept-Encoding": "gzip,deflate,br",
+        "X-CSRFToken": csrftoken,
+    },
+        })
+        .then((response) => {
+            debugger
+            console.log(response)
+            if (!response.ok) {
+                console.log(response);
+                response.text().then((text) => {
+                let detail = JSON.parse(text).detail[0];
+                //DisplayMessage("", detail, false);
+                });
+      } else {
+        return response.json();
+      }
+        }).then((data) => {
+            debugger            
+            let menu = document.getElementById('itemMenu')
+            let item = ''
+            let itemData = ''
+            for(let i=0; i < data.length; i++){
+                
+                itemData =JSON.stringify(data[i])
+                if(data[i]['track_variant'] == true){
+                    let variantNames = []
+                    let optionNames = []
+                    for(let k=0; k < data[i]['variant'].length; k++){
+                        variantNames.push(data[i]['variant'][k]['name'].toString())
+                        for(let j=0; j < data[i]['variant'][k]['option'].length; j++){
+                            optionNames.push(data[i]['variant'][k]['option'][j]['name'].toString())
+                        }
+                    }                    
+                    
+                    arrayVariants = setVariants(data[i]['variant'])
+                    //memory = `<input type="hidden" value= />`
+                    item += `<div class="item" onclick='AddItemVariant(${itemData})'> 
+                            <span>${data[i]['name']}</span>
+                        </div>`
+                }
+                else{
+                    item += `<div class="item" onclick='setItemTable(${itemData})'> ${data[i]['name']}</div>`
+                }                
+            }
+            menu.innerHTML = item
+            //menu.appendChild(item_div)
+        })
+    }
+    
+    searchItems.addEventListener('input', itemFunc)
+
+    function checkItemOptions(data){
+        debugger       
+        
+        let result = []
+        let selectedVariants = []
+        let selectedOptions = []
+        //let variantsCount = elem.parentElement.parentElement.childElementCount;
+        let variantDiv = document.getElementById('item_variant')   
+        let count = variantDiv.childElementCount     
+        for(let i=0; i < variantDiv.childElementCount ; i++){
+            let dict = {}
+            if (variantDiv.children[i].querySelector('select').value != 0){                
+                count--               
+            }
+            selectedVariants[i] = variantDiv.children[i].querySelector('label').innerText
+            dict['name'] = variantDiv.children[i].querySelector('label').innerText
+            selectedOptions[i] = variantDiv.children[i].querySelector('select').value
+            dict['option'] = variantDiv.children[i].querySelector('select').value
+            result.push(dict)
+            if(count == 0){
+                //dict['name'] = selectedVariants
+                //dict['option'] = selectedOptions
+                
+                setItemTable(data, result)
+                $('.ui.modal').modal('hide');
+            }
+        }
+    }
+
+    function setItemTable(data, variants){
+        let units = document.getElementById('units_hf').value
+        let itemTable = document.getElementById("itemsTable")
+        units = units.split(',')
+        let unitCell = '<select class="ui selection dropdown">'
+        let a = []
+        for (let j = 0; j < units.length; j++) {
+            a = units[j].split(':')
+                unitCell += `<option value='${a[1]}'> ${a[0]} </option>`
+            }
+        unitCell += '</select>'
+
+        // let row = `
+        //         <tr>
+        //             <td> ${data['name']} (${data['code']}) </td>
+        //             <td> <input type="text" /> </td>
+        //             <td> <input type="text" /> </td>
+        //             <td>
+        //                 ${unitCell}
+        //             </td>
+        //             </tr>
+        //         `
+        let newRow = itemTable.insertRow();
+        let newCell1 = newRow.insertCell();
+        let content = `${data['name']} (${data['code']})
+        <br/>`
+        if(variants != undefined)
+        for(let i = 0; i < variants.length; i++){
+            content +=`<b>${variants[i]['name']}: </b> <span>${variants[i]['option']}</span><br/>`
+        }
+        newCell1.innerHTML = content
+        newCell1.value = `${data['id']}`
+        let newCell2 = newRow.insertCell()
+        content = `<input type="number" />`
+        newCell2.innerHTML = content
+        let newCell3 = newRow.insertCell()
+        content = `<input type="number" />`
+        newCell3.innerHTML = content
+        let newCell4 = newRow.insertCell()
+        content = `${unitCell}`
+        newCell4.innerHTML = content
+    }
+
+    function AddItemVariant(data){
+        debugger
+        let variantDiv = ''
+        let optionDropdown = ''
+        let variantName = ''
+        let variants = data['variant']
+        for(let i=0; i < variants.length; i++){
+            variantName = variants[i]['name']
+            variantDiv += `<div class="field"> <label value='${variants[i]['id']}'> ${variantName} </label>`
+                optionDropdown = `<select class="ui fluid selection dropdown" onchange='checkItemOptions(${JSON.stringify(data)})'><option value="" disabled selected> ${variantName} </option>`
+                   
+            for(let j=0; j < variants[i]['option'].length; j++){               
+            optionDropdown += `
+            <option value="${variants[i]["option"][j]["name"]}">
+            ${variants[i]["option"][j]["name"]} </option>               
+                `
+            }
+            optionDropdown += '</select>'
+            variantDiv += optionDropdown
+            variantDiv += '</div>'
+        }
+        
+        // for(let k = 0; k < arr1.length; k++){
+        //     console.log(arr1[k])
+        //     variantDiv += '<div class="field">  <label>'
+        //     variantDiv += `${arr1[k]}`
+        //     variantDiv += '</label>'
+        //     for(let k = 0;k < arr2.length; k++){
+        //         console.log(arr2[k])
+        //         optionDropdown += '<select class="ui dropdown">'
+        //         optionDropdown += `
+        //                 <option value=${arr2[k]}>${arr2[k]}</option>               
+        //         `
+        //     }
+        //     optionDropdown += '</select>'
+        //     variantDiv += optionDropdown
+        // variantDiv += '</div>'
+        // }                     
+            document.getElementById('item_variant').innerHTML = variantDiv
+            $('.ui.modal')
+            .modal('show');
+    }
+
+
+
+    
+
+
+    function GetFormData(){
+
+        let requiredList = ['reference','items']
+
+        let count = 0
+        for(let i of requiredList){
+         if(i == 'items'){
+            let t = document.getElementById('itemsTable')
+            if(t.childElementCount == 0){
+                document.getElementsByClassName(`${i}label`)[0].classList.remove('hidden')
+                count++
+                
+            }
+            else{
+                document.getElementsByClassName(`${i}label`)[0].classList.add('hidden')
+            }
+        continue
+    }
+    if (document.getElementsByName(i)[0].value == ""){
+        document.getElementsByClassName(`${i}label`)[0].classList.remove('hidden')
+        count++
+    }
+    else{
+        document.getElementsByClassName(`${i}label`)[0].classList.add('hidden')
+    }
+}
+if (count > 0) return false;
+     let formdata = new FormData();
+            let list = ['date', 'from_warehouse', 'to_warehouse', 'reference', 'items',
+            'details', 'attachment', 'is_draft']
+            
+
+           
+     
+            let variantArray = []
+            for (let i of list){
+                if (i == 'attachment'){
+                    if(document.getElementsByName('attachment')[0].files[0] != undefined)
+                        formdata.append('attachment', document.getElementsByName('attachment')[0].files[0])
+                continue
+                }
+                if(i == 'date'){
+                    let d = document.getElementsByName(i)[0].value
+                    d = d.split('/')                    
+                    formdata.append(i,  d[2]+'-'+d[0]+'-'+d[1])
+                    continue
+                }
+                  if(i == 'items'){
+                    let itemTable = document.getElementById('itemsTable')
+                    let rows = ''
+                    let selectedItems = []
+                    let dict = {}
+                    let variantsArray = []
+                    let optionsDict = {}
+                    let itemArray = []
+                    let itemDict = {}
+                    for(let i=0; i < itemTable.childElementCount; i++){
+                        itemDict = {}
+                        rows = itemTable.children[i].querySelectorAll('td')
+                        itemDict['item'] = rows[0].value
+                        for(let j = 0; j < rows.length; j++){
+                            if(j == 1){
+                            let weight = rows[1].children[0].value
+                            if(weight != undefined || weight != null)
+                           itemDict['weight'] = rows[1].children[0].value;
+                           let selectedVariant = document.getElementById('selected-variant')
+                           if(selectedVariant != null){
+                               for(let k=0; k < selectedVariant.childElementCount; k++){
+                                    selectedVariant.children[k].children
+                               }
+                           }
+                        }
+                        if(j == 2){
+                           itemDict['quantity'] = rows[2].children[0].value;
+                        }
+                        if(j == 3){
+                            itemDict['unit'] = rows[3].children[0].value;
+                        }
+                    }                       
+                        
+                        //selectedItems.push((rows[0].value))
+                        itemArray.push(itemDict)
+                    }
+                    formdata.append(i,JSON.stringify(itemArray))
+                    continue
+                }
+               
+                   
+                formdata.append(i, document.getElementsByName(i)[0].value)
+            }
+            return formdata;
+}
+
+
+
+
+
+
+
+       
+    </script>
+
+    </div>
+   
+   
+        
+        {% endblock %}
+   
+
+        
+    </body>
+</html>

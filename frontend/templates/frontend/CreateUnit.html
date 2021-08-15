@@ -1,0 +1,36 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+{% block content %}
+<div class="page-content"> 
+    <h2>Create New Contact
+      </h2>
+    <h4>Please fill the form below to add new record.
+    </h4>
+<form class="ui form" method="POST" action="../api/unit/create">
+{% csrftoken %}
+<div class="field">
+    <label>Name</label>
+    <input type="text" name="name"/>
+</div>
+<div class="field">
+    <label>Code</label>
+    <input type="text" name="code" />
+</div>
+
+<div class="field">
+<label>Base Unit</label>
+<select name="base_unit"> 
+{% for b in base_unit%}
+<option value = {{b.pk}}>
+{{b}}
+</option>
+ {% endfor %}
+ </select>
+</div>
+<button class="ui button submitBtn"> Save </button>
+</form>
+</div>
+{% endblock %}

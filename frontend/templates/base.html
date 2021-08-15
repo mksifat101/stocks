@@ -1,0 +1,377 @@
+{% load static %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">        
+        <link rel="stylesheet" type="text/css" href="{% static 'css/App.css' %}">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+        <!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
+      
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.js"></script>       
+            <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script> 
+        <style>
+          
+        </style>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <!-- <div class="topnavbar" >
+            <div class="ui right aligned icon button" style="">
+               
+                <i class="bars icon"></i>         
+            </div>
+        </div> -->
+       <input id="dateFieldHF" type="hidden" value='{{date}}' />
+        <div>
+            <div>
+            <div class="topnavbar" >
+               
+                <div id="openNavBtn" style="width: 80px;" class="ui icon button navbar-button" onclick="openNavBar()">                   
+                    <i class="large bars icon" ></i>                                 
+                </div>                
+                <div id="closeNavBtn" style="width: 80px;display: none;" class="ui icon button navbar-button" onclick="closeNavBar()">                                   
+                    <i class="large close icon"></i>         
+                </div>
+              
+            </div>
+        <div class="topbar" id="topBar">
+            <div style="justify-self: flex-start;margin-left: auto;margin-right: auto;flex-grow: 0.49;">
+                <div class="ui icon button createButton" onclick="openTaskMenu()">
+                    <i class="plus icon"></i>
+                    <span>New</span>        
+                    <div class="ui vertical menu topbar-menu" id="taskMenu">
+                        <a class="item" href="/checkins/create">
+                          Create New Checkin                 
+                        </a>
+                        <a class="item" href="/checkouts/create">
+                            Create New Checkout                  
+                        </a>                               
+                        <a class="item" href="/items/create">
+                            Create New Item                  
+                        </a>                               
+                        <a class="item" href="/contacts/create">
+                            Create New Contact                  
+                        </a>                               
+                        <a class="item" href="/categories/create">
+                            Create New Category                  
+                        </a>                               
+                        <a class="item" href="">
+                            Create New Unit                  
+                        </a>                               
+                        <a class="item" href="/warehouses/create">
+                            Create New Warehouse                  
+                        </a>                               
+                        <a class="item" href="/users/create">
+                            Create New User                  
+                        </a>                               
+                        <a class="item" href="">
+                            Create New Role                  
+                        </a>                               
+                      </div>           
+                </div>
+              
+            </div>
+            <div style="justify-self: flex-end;">
+             
+                <div class="settings-section">
+                <div style="margin-left: 20px;align-self: center;">
+                    <i class="setting icon"></i>
+                </div>
+                <div style="margin-left: 20px;align-self: center !important;;">
+                    <i class="bell icon"></i>
+                </div>
+                <div class="ui icon button" style="margin-left: 20px;margin-right: 50px;background-color: white !important;;">
+                   <span>Welcome, {{request.user}}</span>
+                   
+                <div class="ui vertical menu topbar-menu" id="userMenu">
+                    <a class="item">
+                      Profile                 
+                    </a>
+                    <a class="item" href="{% url 'logout' %}">
+                      Logout                  
+                    </a>                               
+                  </div>
+                </div>
+                <a class="ui icon button" style="margin-right: 20px;" href="{% url 'logout' %}">
+                    <span >
+                        Logout
+                        <i class="power off icon"></i>
+                        <span>
+                        </a>
+            </div>
+            </div>
+        </div>
+
+       
+
+    </div>
+    <div style="display: flex;justify-content: center;" class="" >
+        <div class="" style="flex-grow: 0.7;">
+               
+    </div>
+    </div>
+           <div class="page-container" style="">
+           
+           <div class="sidenav" id="sideNavBar" style="">
+                <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
+               <div class="">
+               
+                <div class="item">
+                    <a href="/" class="ui icon button sidenavbutton" >
+                       <i class="home icon"></i> 
+                        <label>Dashboard</label> 
+                    <i class="dropdown icon right" style="visibility: hidden;"></i> 
+                    </a>                   
+                </div>
+                <div class="item">
+                    <div onclick="menuItemClick(this)" id="checkinButton" class="ui icon button sidenavbutton" style="background-color: transparent;color: white;width: 100%;">
+                        <i class="sign-in icon"></i>
+                         <label>Checkins</label>  
+                         <i class="dropdown icon right"></i> </div>
+                    <ul class="sidebarmenu menulist" onclick="check(this)">
+                        <li><i class="linkify icon"></i><a href="/checkins">List All Checkins</a></li>
+                        <li><i class="linkify icon"></i><a href="/checkins/create">Create New Checkin</a></li>                                        
+                    </ul>
+                </div>              
+                <div class="item">
+                    <div onclick="menuItemClick(this)" id="checkoutButton" class="ui icon button sidenavbutton" style="background-color: transparent;color: white;width: 100%;">
+                        <i class="sign-out icon"></i> 
+                        <label>Checkouts</label>  
+                        <i class="dropdown icon right"></i> </div>
+                    <ul class="sidebarmenu menulist">
+                        <li> <i class="linkify icon"></i><a href="/checkouts"> List All Checkouts</a></li>
+                        <li><i class="linkify icon"></i><a href="/checkouts/create">Create New Checkout</a></li>                                        
+                    </ul>
+                </div>              
+                <div class="item">
+                    <div onclick="menuItemClick(this)" id="adjustmentButton" class="ui icon button sidenavbutton" style="background-color: transparent;color: white;width: 100%;">
+                        <i class="sliders icon"></i> 
+                        <label style="text-align: left;">Adjustments</label>  
+                        <i class="dropdown icon right"></i> </div>
+                    <ul class="sidebarmenu menulist">
+                        <li><i class="linkify icon"></i>
+                            <a href="/adjustments">List All Adjustments</a></li>
+                        <li><i class="linkify icon"></i>
+                            <a href="/adjustments/create">
+                            Create Adjustment</a></li>
+                                          
+                    </ul>
+                </div>              
+                <div class="item">
+                    <div onclick="menuItemClick(this)" id="transferButton" class="ui icon button sidenavbutton" style="background-color: transparent;color: white;width: 100%;">
+                        <i class="truck icon"></i> 
+                        <label>Transfers</label>  
+                        <i class="dropdown icon right"></i> </div>
+                        <ul class="sidebarmenu menulist">
+                            <li><i class="linkify icon"></i>
+                                <a href="/transfers">List All Transfers</a></li>
+                            <li><i class="linkify icon"></i>
+                                <a href="/transfers/create">
+                                Create Transfer</a></li>
+                                              
+                        </ul>
+                </div>              
+                <div class="item">
+                    <div onclick="menuItemClick(this)" id="itemButton"  class="ui icon button sidenavbutton" style="background-color: transparent;color: white;width: 100%;">
+                        <i class="cube icon"></i> 
+                        <label>Items</label>  
+                        <i class="dropdown icon right"></i> </div>
+                        <ul class="sidebarmenu menulist">
+                            <li><i class="linkify icon"></i>
+                                <a href="/items">List All Items</a></li>
+                            <li><i class="linkify icon"></i>
+                                <a href="/items/create">
+                                Create New Item</a></li>
+                            <li><i class="linkify icon"></i>
+                                <a>
+                                Import Items</a></li>
+                                              
+                        </ul>
+                </div>              
+                <div class="item">
+                    <div onclick="menuItemClick(this)" id="contactButton" class="ui icon button sidenavbutton" style="background-color: transparent;color: white;width: 100%;">
+                        <i class="users icon"></i> <label>Contacts</label>  <i class="dropdown icon right"></i> </div>
+                    <ul class="sidebarmenu menulist">
+                        <li><i class="linkify icon"></i><a href="/contacts">List All Contacts</a></li>
+                        <li><i class="linkify icon"></i><a href="/contacts/create">Create New Contact</a></li>
+                        <li><i class="linkify icon"></i><a href="/contacts/import">Import Contacts</a></li>                                                     
+                    </ul>
+                </div>   
+                <div class="item">
+                    <div onclick="menuItemClick(this)" id="boxesButton" class="ui icon button sidenavbutton" style="background-color: transparent;color: white;width: 100%;">
+                        <i class="boxes icon"></i> <label>Categories</label>  <i class="dropdown icon right"></i> </div>
+                    <ul class="sidebarmenu menulist">
+                        <li><i class="linkify icon"></i><a href="/categories">List All Categories</a></li>
+                        <li><i class="linkify icon"></i><a href="/categories/create">Create New Category</a></li>
+                        <li><i class="linkify icon"></i><a>Import Categories</a></li>                                                     
+                    </ul>
+                </div>              
+                <div class="item">
+                    <div onclick="menuItemClick(this)" id="unitButton" class="ui icon button sidenavbutton" style="background-color: transparent;color: white;width: 100%;">
+                        <i class="balance scale icon"></i> <label>Units</label>  <i class="dropdown icon right"></i> </div>
+                    <ul class="sidebarmenu menulist">
+                        <li><i class="linkify icon"></i><a href="/units">List All Units</a></li>
+                        <li><i class="linkify icon"></i><a href="/units/create">Create New Unit</a></li>
+                        <li><i class="linkify icon"></i><a>Import Units</a></li>                                                     
+                    </ul>
+                </div>           
+                
+                <div class="item">
+                    <div onclick="menuItemClick(this)" id="warehouseButton" class="ui icon button sidenavbutton" style="background-color: transparent;color: white;width: 100%;">
+                        <i class="warehouse icon"></i> <label>Warehouses</label>  <i class="dropdown icon right"></i> </div>
+                    <ul class="sidebarmenu menulist">
+                        <li><i class="linkify icon"></i><a href="/warehouses">List All Warehouses</a></li>
+                        <li><i class="linkify icon"></i><a href="/warehouses/create">Create New Warehouse</a></li>
+                        <li><i class="linkify icon"></i><a>Import Warehouses</a></li>                                                     
+                    </ul>
+                </div>                            
+              
+                <div class="item">
+                    <div onclick="menuItemClick(this)" id="userButton" class="ui icon button sidenavbutton" style="background-color: transparent;color: white;width: 100%;">
+                        <i class="user icon"></i> <label>Users</label>  <i class="dropdown icon right"></i> </div>
+                    <ul class="sidebarmenu menulist">
+                        <li><i class="linkify icon"></i><a href="/users">Show All Users</a></li>
+                        <li><i class="linkify icon"></i><a href="/users/create">Create New User</a></li>
+                        <li><i class="linkify icon"></i><a>Show All Roles</a></li>
+                        <li><i class="linkify icon"></i><a>Create new Role</a></li>                                   
+                    </ul>
+                </div>     
+                
+                <div class="item">
+                    <div onclick="menuItemClick(this)" id="reportButton" class="ui icon button sidenavbutton" style="background-color: transparent;color: white;width: 100%;">
+                        <i class="signal icon"></i> <label>Reports</label>  <i class="dropdown icon right"></i> </div>
+                    <ul class="sidebarmenu menulist">
+                        <li><i class="linkify icon"></i><a>Total Records</a></li>
+                        <li><i class="linkify icon"></i><a>Checkin Report</a></li>
+                        <li><i class="linkify icon"></i><a>Checkout Report</a></li>
+                        <li><i class="linkify icon"></i><a>Transfer Report</a></li>                                   
+                        <li><i class="linkify icon"></i><a>Adjustment Report</a></li>                                   
+                    </ul>
+                </div>    
+
+            </div>                
+        </div>
+        
+ 
+   
+        {% block content%}
+
+        {% endblock %}
+    </div>
+</div>
+    
+        
+        
+        <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+        <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+  
+    <script>
+
+// window.onscroll = function() {
+//     topBarScroll()
+// }
+
+
+function openNavBar(){
+    debugger
+   document.getElementById('openNavBtn').style.display = 'none'
+   document.getElementById('closeNavBtn').style.display = 'block'
+   document.getElementById('sideNavBar').style.display = 'block'
+}
+
+function closeNavBar(){
+    debugger
+   document.getElementById('openNavBtn').style.display = 'block'
+   document.getElementById('closeNavBtn').style.display = 'none'
+   document.getElementById('sideNavBar').style.display = 'none'
+}
+
+function openTaskMenu(){
+    if (document.getElementById('taskMenu').classList.contains('visibleMenu')){
+        document.getElementById('taskMenu').classList.remove('visibleMenu')
+    }
+    else{
+        document.getElementById('taskMenu').classList.add('visibleMenu')
+    }
+    // document.getElementById('taskMenu').style.display = 'block'
+    // document.getElementById('taskMenu').style.visibility = 'visible'
+}
+
+function OpenUserMenu(){
+    if (document.getElementById('userMenu').classList.contains('visibleMenu')){
+        document.getElementById('userMenu').classList.remove('visibleMenu')
+    }
+    else{
+        document.getElementById('userMenu').classList.add('visibleMenu')
+    }
+}
+
+window.onload = function () {
+              debugger
+              document.getElementById("adjustmentButton").classList.remove("sidebarmenu")
+            }
+
+let topBar = document.getElementById("topBar");
+ debugger
+    const menuItemClick = (key) => {
+        debugger
+        // let val = parseInt(document.getElementById('counter').value);
+        // key.children[1].style.display = 'inline-block'
+        // if(key.children[1].classList.contains("sidebarmenu")){
+        //     key.children[1].classList.remove("sidebarmenu");    
+        //     document.getElementById('counter').value = val +1;
+        // }
+        // //key.children[1].classList.add = 'sidebarmenuVisible'
+        // else{
+        //     key.children[1].classList.add("sidebarmenu");
+        // }
+        // document.getElementById('counter').value = val + 1;
+       
+    let element = key.nextElementSibling.classList
+      if(element.contains("sidebarmenu")){
+        element.remove("sidebarmenu");   
+        key.classList.add('clicked')         
+      }
+      else{
+        element.add("sidebarmenu");
+        key.classList.remove('clicked')
+      }
+       
+  }
+
+  function check(key){
+    // let val = parseInt(document.getElementById('counter').value);
+    //     //key.children[1].style.display = 'inline-block'
+    //     if(key.children[1].classList.contains("sidebarmenu")){
+    //         key.children[1].classList.remove("sidebarmenu");    
+    //         document.getElementById('counter').value = val +1;
+    //     }
+    //     //key.children[1].classList.add = 'sidebarmenuVisible'
+    //     else{
+    //         key.children[1].classList.add("sidebarmenu");
+    //     }
+    
+    return
+  }
+    </script>
+    <script src="{%static 'js/App.js' %}"></script>  
+    </body>
+</html>

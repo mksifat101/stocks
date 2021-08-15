@@ -1,0 +1,49 @@
+<!doctype html>
+<table class="ui celled stackable padded table">
+              <thead>
+                <tr>
+                    <th>{{type}}</th>
+                    <th>Relations</th>
+                    <th>Details</th>
+                    <th></th>                    
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in data %}
+                     <tr>
+                    <td class="single line">
+                    <span>Ref:  </span> <label> {{row.reference}} </label><br/>
+                    <span>Date:  </span> <label> {{row.date}} </label>
+                    
+                    </td>
+                    <td class="single line">
+                        <span>To: </span> <label> {{row.to_warehouse}} </label> <br/>
+                        <span>From: </span> <label> {{row.from_warehouse}} </label> <br/>
+                    </td>
+                    <td>{{ transfer.details }}</td>
+                    <td class="single line">
+                        <i class="blue file icon"></i>
+                        <i class="violet mail icon"></i>
+                        <i class="orange edit icon"></i>
+                        <i class="red trash icon"></i>
+                    </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr><th colspan="5">
+                  <div class="ui right floated pagination menu">
+                    <a class="icon item">
+                      <i class="left chevron icon"></i>
+                    </a>
+                    <a class="item">1</a>
+                    <a class="item">2</a>
+                    <a class="item">3</a>
+                    <a class="item">4</a>
+                    <a class="icon item">
+                      <i class="right chevron icon"></i>
+                    </a>
+                  </div>
+                </th>
+              </tr></tfoot>
+          </table>
